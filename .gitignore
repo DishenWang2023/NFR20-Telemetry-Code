@@ -1,0 +1,6 @@
+# live telemetry data
+/Telemetry_Data
+
+# misc
+/.idea
+/__pycache__
