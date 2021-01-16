@@ -1,4 +1,4 @@
-Telemetry
+Telemetry Code
 
 Arduino_Code\\telemetry.ino: Program that sends data from Arduino to Ground Station using Xbee.
 
