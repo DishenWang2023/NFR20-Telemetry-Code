@@ -3,12 +3,11 @@ import struct
 import serial
 import serial.tools.list_ports
 import numpy as np
-import telemetry_csv as tc  # might cause error
+import telemetry_csv as tc
+import sensor_list as sl
 
 # from digi.xbee.devices import XBeeDevice
-
-sensor_names = ["Index", "time", "rpm", "lambdas", "BT", "SP", "BP", "TP", "IMAP", "IMAT", "OP", "OT", "CA", "CT", "CrA"]
-csv_name = "test_data.csv"
+csv_name = "Telemetry_Data/test_data.csv"
 
 
 def select_serial_port():
@@ -50,7 +49,7 @@ sig_list = np.array([0, 0, 1, 2, 0, 0, 1, 2,
                     0, 0, 0, 0, 0, 0, 0, 0,
                     4, 1, 2, 1])  # multiplications for each sensor values turning short back to float
 
-#tc.csv_create_header(csv_name, sensor_names)
+tc.csv_create_header(csv_name, sl.sensor_names)
 
 """___TODO___
 
@@ -79,7 +78,7 @@ while True:
 
     csv_list = np.concatenate((np.array([index, current_time]), sensor_values))
     index += 1
-    tc.csv_store_data(csv_name, sensor_names, csv_list)
+    tc.csv_store_data(csv_name, sl.sensor_names, csv_list)
     print(csv_list)
 
     ''' wait '''
