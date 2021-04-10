@@ -52,7 +52,7 @@ app.layout = html.Div([
                       label='Vehicle Speed'
                       ),
             html.H3("Throttle Position"),
-            daq.GraduatedBar(id='tps-grad-bar',
+            daq.GraduatedBar(id='overview_tps_grad_bar',
                              color={"gradient": True,
                                     "ranges": {"green": [0, 80], "yellow": [80, 90], "red": [90, 100]}},
                              showCurrentValue=True,
@@ -377,7 +377,6 @@ def update_fl_vss_grad_bar(n_intervals):
 def update_fr_vss_graph(n_intervals, n_clicks):
     data = pd.read_csv(file)
     value = data['fr_vss']
-    value = abs(value[len(value) - 1])
     if n_clicks % 2 == 0:
         raise PreventUpdate
     fig = go.Figure(go.Scatter(x=data['time'], y=data['fr_vss']))
@@ -408,8 +407,6 @@ def update_fr_vss_grad_bar(n_intervals):
 )
 def update_bl_vss_graph(n_intervals, n_clicks):
     data = pd.read_csv(file)
-    value = data['bl_vss']
-    value = abs(value[len(value) - 1])
     if n_clicks % 2 == 0:
         raise PreventUpdate
     fig = go.Figure(go.Scatter(x=data['time'], y=data['bl_vss']))
@@ -440,8 +437,6 @@ def update_bl_vss_grad_bar(n_intervals):
 )
 def update_br_vss_graph(n_intervals, n_clicks):
     data = pd.read_csv(file)
-    value = data['br_vss']
-    value = abs(value[len(value) - 1])
     if n_clicks % 2 == 0:
         raise PreventUpdate
     fig = go.Figure(go.Scatter(x=data['time'], y=data['br_vss']))
@@ -624,13 +619,14 @@ def update_graph(n_intervals, n_clicks):
 
 @app.callback(
     dash.dependencies.Output('tps_grad_bar', 'value'),
+    dash.dependencies.Output('overview_tps_grad_bar', 'value'),
     [dash.dependencies.Input('interval-component', 'n_intervals')]
 )
 def update_tps_grad_bar(n_intervals):
     data = pd.read_csv(file)
     value = data['tps']
     value = abs(value[len(value) - 1])
-    return value
+    return value, value
 
 # </editor-fold>
 
