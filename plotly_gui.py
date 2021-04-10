@@ -16,7 +16,7 @@ colors = {
 }
 
 # change this file that the csv is stored in
-file = 'data.csv'
+file = 'TelemetryData/data.csv'
 
 df = pd.read_csv(file)
 num_clicks = 1
@@ -330,7 +330,7 @@ def update_button(n_clicks):
     [dash.dependencies.Input('interval-component', 'n_intervals')]
 )
 def update_vs_gauge(n_intervals):
-    data = pd.read_csv('data.csv')
+    data = pd.read_csv(file)
     fr = abs(data['fr_vss'])
     fl = abs(data['fl_vss'])
     br = abs(data['br_vss'])
