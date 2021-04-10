@@ -1,3 +1,4 @@
+pyserial
 dash
 dash-daq
 pandas
