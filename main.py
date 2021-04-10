@@ -41,20 +41,18 @@ time.sleep(1)
 
 index = 0
 start_time = time.time()
-size = 37 * 2
+size = 27 * 2 # 27
 id_bytes = b'\x80\x01'
+
 sig_list = np.array([0, 0, 1, 2, 0, 0, 1, 2,
                     1, 1, 0, 0, 0, 0, 0, 0,
                     0, 0, 0, 3, 3, 3, 2, 1,
-                    0, 0, 0, 0, 0, 0, 0, 0,
-                    4, 1, 2, 1])  # multiplications for each sensor values turning short back to float
+                    0, 1])  # multiplications for each sensor values turning short back to float
 
+# sig_list = np.array([0,0,0])
 tc.csv_create_header(csv_name, sl.sensor_names)
 
 """___TODO___
-
-1. Send 36 values
-
 """
 while True:
     current_time = round(time.time() - start_time, 2)
@@ -65,7 +63,7 @@ while True:
         # print("Warning, incorrect identifier, second chance")
         raw_values += device.read_until(id_bytes, size)
         if raw_values[len(raw_values) - 2:len(raw_values)] != id_bytes:
-            print("Second chance fail at: " + current_time)
+            print("Second chance fail at: " + str(current_time))
             print(raw_values)
             time.sleep(0.1)
             device.flushInput()
@@ -75,6 +73,7 @@ while True:
     tuple_values = struct.unpack('>'+'h'*(size//2), raw_values[len(raw_values)-size:len(raw_values)])  # data type: tuple
     sensor_values = np.asarray(tuple_values[:len(tuple_values)-1]) / (10 ** sig_list)
     print(current_time)
+    print(sensor_values[1])
 
     csv_list = np.concatenate((np.array([index, current_time]), sensor_values))
     index += 1
