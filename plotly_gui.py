@@ -331,10 +331,10 @@ def update_button(n_clicks):
 )
 def update_vs_gauge(n_intervals):
     data = pd.read_csv(file)
-    fr = abs(data['fr_vss'])
-    fl = abs(data['fl_vss'])
-    br = abs(data['br_vss'])
-    bl = abs(data['bl_vss'])
+    fr = abs(data['FR_VSS'])
+    fl = abs(data['FL_VSS'])
+    br = abs(data['BR_VSS'])
+    bl = abs(data['BL_VSS'])
     return (fr[len(fr) - 1] + fl[len(fl) - 1] + br[len(br) - 1] + bl[len(bl) - 1]) / 4
 
 # <editor-fold desc="Updating Graphs">
@@ -348,7 +348,7 @@ def update_fl_vss_graph(n_intervals, n_clicks):
     data = pd.read_csv(file)
     if n_clicks % 2 == 0:
         raise PreventUpdate
-    fig = go.Figure(go.Scatter(x=data['time'], y=data['fl_vss']))
+    fig = go.Figure(go.Scatter(x=data['Time'], y=data['FL_VSS']))
     fig.update_layout(title_text="Front Left Wheel Speed Graph")
     fig.update_layout(xaxis=dict(rangeslider=dict(visible=True), type="linear"))
     return fig
@@ -360,7 +360,7 @@ def update_fl_vss_graph(n_intervals, n_clicks):
 )
 def update_fl_vss_grad_bar(n_intervals):
     data = pd.read_csv(file)
-    value = data['fl_vss']
+    value = data['FL_VSS']
     value = abs(value[len(value) - 1])
     return value
 
@@ -376,10 +376,9 @@ def update_fl_vss_grad_bar(n_intervals):
 )
 def update_fr_vss_graph(n_intervals, n_clicks):
     data = pd.read_csv(file)
-    value = data['fr_vss']
     if n_clicks % 2 == 0:
         raise PreventUpdate
-    fig = go.Figure(go.Scatter(x=data['time'], y=data['fr_vss']))
+    fig = go.Figure(go.Scatter(x=data['Time'], y=data['FR_VSS']))
     fig.update_layout(title_text="Front Right Wheel Speed Graph")
     fig.update_layout(xaxis=dict(rangeslider=dict(visible=True), type="linear"))
     return fig
@@ -391,7 +390,7 @@ def update_fr_vss_graph(n_intervals, n_clicks):
 )
 def update_fr_vss_grad_bar(n_intervals):
     data = pd.read_csv(file)
-    value = data['fr_vss']
+    value = data['FR_VSS']
     value = abs(value[len(value) - 1])
     return value
 
@@ -409,7 +408,7 @@ def update_bl_vss_graph(n_intervals, n_clicks):
     data = pd.read_csv(file)
     if n_clicks % 2 == 0:
         raise PreventUpdate
-    fig = go.Figure(go.Scatter(x=data['time'], y=data['bl_vss']))
+    fig = go.Figure(go.Scatter(x=data['Time'], y=data['BL_VSS']))
     fig.update_layout(title_text="Back Left Wheel Speed Graph")
     fig.update_layout(xaxis=dict(rangeslider=dict(visible=True), type="linear"))
     return fig
@@ -421,7 +420,7 @@ def update_bl_vss_graph(n_intervals, n_clicks):
 )
 def update_bl_vss_grad_bar(n_intervals):
     data = pd.read_csv(file)
-    value = data['bl_vss']
+    value = data['BL_VSS']
     value = abs(value[len(value) - 1])
     return value
 
@@ -439,7 +438,7 @@ def update_br_vss_graph(n_intervals, n_clicks):
     data = pd.read_csv(file)
     if n_clicks % 2 == 0:
         raise PreventUpdate
-    fig = go.Figure(go.Scatter(x=data['time'], y=data['br_vss']))
+    fig = go.Figure(go.Scatter(x=data['Time'], y=data['BR_VSS']))
     fig.update_layout(title_text="Back Right Wheel Speed Graph")
     fig.update_layout(xaxis=dict(rangeslider=dict(visible=True), type="linear"))
     return fig
@@ -451,7 +450,7 @@ def update_br_vss_graph(n_intervals, n_clicks):
 )
 def update_br_vss_grad_bar(n_intervals):
     data = pd.read_csv(file)
-    value = data['br_vss']
+    value = data['BR_VSS']
     value = abs(value[len(value) - 1])
     return value
 
@@ -468,7 +467,7 @@ def update_fl_sus_pot_graph(n_intervals, n_clicks):
     if n_clicks % 2 == 0:
         raise PreventUpdate
     data = pd.read_csv(file)
-    fig = go.Figure(go.Scatter(x=data['time'], y=data['fl_sus_pot']))
+    fig = go.Figure(go.Scatter(x=data['Time'], y=data['FL_SUS_POT']))
     fig.update_layout(title_text="Front Left Suspension Potentiometer Graph")
     fig.update_layout(xaxis=dict(rangeslider=dict(visible=True), type="linear"))
     return fig
@@ -480,7 +479,7 @@ def update_fl_sus_pot_graph(n_intervals, n_clicks):
 )
 def update_fl_sus_pot_grad_bar(n_intervals):
     data = pd.read_csv(file)
-    value = data['fl_sus_pot']
+    value = data['FL_SUS_POT']
     value = abs(value[len(value) - 1])
     return value
 # </editor-fold>
@@ -496,7 +495,7 @@ def update_fr_sus_pot_graph(n_intervals, n_clicks):
     if n_clicks % 2 == 0:
         raise PreventUpdate
     data = pd.read_csv(file)
-    fig = go.Figure(go.Scatter(x=data['time'], y=data['fr_sus_pot']))
+    fig = go.Figure(go.Scatter(x=data['Time'], y=data['FR_SUS_POT']))
     fig.update_layout(title_text="Front Right Suspension Potentiometer Graph")
     fig.update_layout(xaxis=dict(rangeslider=dict(visible=True), type="linear"))
     return fig
@@ -508,7 +507,7 @@ def update_fr_sus_pot_graph(n_intervals, n_clicks):
 )
 def update_fr_sus_pot_grad_bar(n_intervals):
     data = pd.read_csv(file)
-    value = data['fr_sus_pot']
+    value = data['FR_SUS_POT']
     value = abs(value[len(value) - 1])
     return value
 
@@ -525,7 +524,7 @@ def update_graph(n_intervals, n_clicks):
     if n_clicks % 2 == 0:
         raise PreventUpdate
     data = pd.read_csv(file)
-    fig = go.Figure(go.Scatter(x=data['time'], y=data['bl_sus_pot']))
+    fig = go.Figure(go.Scatter(x=data['Time'], y=data['BL_SUS_POT']))
     fig.update_layout(title_text="Back Left Suspension Potentiometer Graph")
     fig.update_layout(xaxis=dict(rangeslider=dict(visible=True), type="linear"))
     return fig
@@ -537,7 +536,7 @@ def update_graph(n_intervals, n_clicks):
 )
 def update_bl_sus_pot_grad_bar(n_intervals):
     data = pd.read_csv(file)
-    value = data['bl_sus_pot']
+    value = data['BL_SUS_POT']
     value = abs(value[len(value) - 1])
     return value
 
@@ -553,7 +552,7 @@ def update_graph(n_intervals, n_clicks):
     if n_clicks % 2 == 0:
         raise PreventUpdate
     data = pd.read_csv(file)
-    fig = go.Figure(go.Scatter(x=data['time'], y=data['br_sus_pot']))
+    fig = go.Figure(go.Scatter(x=data['Time'], y=data['BR_SUS_POT']))
     fig.update_layout(title_text="Back Right Suspension Potentiometer Graph")
     fig.update_layout(xaxis=dict(rangeslider=dict(visible=True), type="linear"))
     return fig
@@ -565,7 +564,7 @@ def update_graph(n_intervals, n_clicks):
 )
 def update_br_sus_pot_grad_bar(n_intervals):
     data = pd.read_csv(file)
-    value = data['br_sus_pot']
+    value = data['BR_SUS_POT']
     value = abs(value[len(value) - 1])
     return value
 
@@ -581,7 +580,7 @@ def update_graph(n_intervals, n_clicks):
     if n_clicks % 2 == 0:
         raise PreventUpdate
     data = pd.read_csv(file)
-    fig = go.Figure(go.Scatter(x=data['time'], y=data['steer_ang']))
+    fig = go.Figure(go.Scatter(x=data['Time'], y=data['STEER_ANG']))
     fig.update_layout(title_text="Steering Angle Graph")
     fig.update_layout(xaxis=dict(rangeslider=dict(visible=True), type="linear"))
     return fig
@@ -593,7 +592,7 @@ def update_graph(n_intervals, n_clicks):
 )
 def update_steer_ang_grad_bar(n_intervals):
     data = pd.read_csv(file)
-    value = data['steer_ang']
+    value = data['STEER_ANG']
     value = abs(value[len(value) - 1])
     return value
 
@@ -611,7 +610,7 @@ def update_graph(n_intervals, n_clicks):
     if n_clicks % 2 == 0:
         raise PreventUpdate
     data = pd.read_csv(file)
-    fig = go.Figure(go.Scatter(x=data['time'], y=data['tps']))
+    fig = go.Figure(go.Scatter(x=data['Time'], y=data['TPS']))
     fig.update_layout(title_text="Throttle Position Graph")
     fig.update_layout(xaxis=dict(rangeslider=dict(visible=True), type="linear"))
     return fig
@@ -624,7 +623,7 @@ def update_graph(n_intervals, n_clicks):
 )
 def update_tps_grad_bar(n_intervals):
     data = pd.read_csv(file)
-    value = data['tps']
+    value = data['TPS']
     value = abs(value[len(value) - 1])
     return value, value
 
@@ -642,7 +641,7 @@ def update_graph(n_intervals, n_clicks):
     if n_clicks % 2 == 0:
         raise PreventUpdate
     data = pd.read_csv(file)
-    fig = go.Figure(go.Scatter(x=data['time'], y=data['oil_pres']))
+    fig = go.Figure(go.Scatter(x=data['Time'], y=data['OIL_PRES']))
     fig.update_layout(title_text="Oil Pressure Graph")
     fig.update_layout(xaxis=dict(rangeslider=dict(visible=True), type="linear"))
     return fig
@@ -654,7 +653,7 @@ def update_graph(n_intervals, n_clicks):
 )
 def update_oil_pres_grad_bar(n_intervals):
     data = pd.read_csv(file)
-    value = data['oil_pres']
+    value = data['OIL_PRES']
     value = abs(value[len(value) - 1])
     return value
 
@@ -672,7 +671,7 @@ def update_graph(n_intervals, n_clicks):
     if n_clicks % 2 == 0:
         raise PreventUpdate
     data = pd.read_csv(file)
-    fig = go.Figure(go.Scatter(x=data['time'], y=data['map']))
+    fig = go.Figure(go.Scatter(x=data['Time'], y=data['MAP']))
     fig.update_layout(title_text="Intake Manifold Air Pressure Graph")
     fig.update_layout(xaxis=dict(rangeslider=dict(visible=True), type="linear"))
     return fig
@@ -684,7 +683,7 @@ def update_graph(n_intervals, n_clicks):
 )
 def update_map_grad_bar(n_intervals):
     data = pd.read_csv(file)
-    value = data['map']
+    value = data['MAP']
     value = abs(value[len(value) - 1])
     return value
 
@@ -702,7 +701,7 @@ def update_graph(n_intervals, n_clicks):
     if n_clicks % 2 == 0:
         raise PreventUpdate
     data = pd.read_csv(file)
-    fig = go.Figure(go.Scatter(x=data['time'], y=data['mat']))
+    fig = go.Figure(go.Scatter(x=data['Time'], y=data['MAT']))
     fig.update_layout(title_text="Intake Manifold Air Temperature Graph")
     fig.update_layout(xaxis=dict(rangeslider=dict(visible=True), type="linear"))
     return fig
@@ -714,7 +713,7 @@ def update_graph(n_intervals, n_clicks):
 )
 def update_mat_grad_bar(n_intervals):
     data = pd.read_csv(file)
-    value = data['mat']
+    value = data['MAT']
     value = abs(value[len(value) - 1])
     return value
 
@@ -732,7 +731,7 @@ def update_graph(n_intervals, n_clicks):
     if n_clicks % 2 == 0:
         raise PreventUpdate
     data = pd.read_csv(file)
-    fig = go.Figure(go.Scatter(x=data['time'], y=data['fl_brk_tmp']))
+    fig = go.Figure(go.Scatter(x=data['Time'], y=data['FL_BRK_TMP']))
     fig.update_layout(title_text="Front Left Brake Temperature Graph")
     fig.update_layout(xaxis=dict(rangeslider=dict(visible=True), type="linear"))
     return fig
@@ -744,7 +743,7 @@ def update_graph(n_intervals, n_clicks):
 )
 def update_fl_brk_tmp_grad_bar(n_intervals):
     data = pd.read_csv(file)
-    value = data['fl_brk_tmp']
+    value = data['FL_BRK_TMP']
     value = abs(value[len(value) - 1])
     return value
 
@@ -762,7 +761,7 @@ def update_graph(n_intervals, n_clicks):
     if n_clicks % 2 == 0:
         raise PreventUpdate
     data = pd.read_csv(file)
-    fig = go.Figure(go.Scatter(x=data['time'], y=data['fr_brk_tmp']))
+    fig = go.Figure(go.Scatter(x=data['Time'], y=data['FR_BRK_TMP']))
     fig.update_layout(title_text="Front Right Brake Temperature Graph")
     fig.update_layout(xaxis=dict(rangeslider=dict(visible=True), type="linear"))
     return fig
@@ -774,7 +773,7 @@ def update_graph(n_intervals, n_clicks):
 )
 def update_fr_brk_tmp_grad_bar(n_intervals):
     data = pd.read_csv(file)
-    value = data['fr_brk_tmp']
+    value = data['FR_BRK_TMP']
     value = abs(value[len(value) - 1])
     return value
 
@@ -792,7 +791,7 @@ def update_graph(n_intervals, n_clicks):
     if n_clicks % 2 == 0:
         raise PreventUpdate
     data = pd.read_csv(file)
-    fig = go.Figure(go.Scatter(x=data['time'], y=data['bl_brk_tmp']))
+    fig = go.Figure(go.Scatter(x=data['Time'], y=data['BL_BRK_TMP']))
     fig.update_layout(title_text="Back Left Brake Temperature Graph")
     fig.update_layout(xaxis=dict(rangeslider=dict(visible=True), type="linear"))
     return fig
@@ -804,7 +803,7 @@ def update_graph(n_intervals, n_clicks):
 )
 def update_bl_brk_tmp_grad_bar(n_intervals):
     data = pd.read_csv(file)
-    value = data['bl_brk_tmp']
+    value = data['BL_BRK_TMP']
     value = abs(value[len(value) - 1])
     return value
 
@@ -822,7 +821,7 @@ def update_graph(n_intervals, n_clicks):
     if n_clicks % 2 == 0:
         raise PreventUpdate
     data = pd.read_csv(file)
-    fig = go.Figure(go.Scatter(x=data['time'], y=data['br_brk_tmp']))
+    fig = go.Figure(go.Scatter(x=data['Time'], y=data['BR_BRK_TMP']))
     fig.update_layout(title_text="Back Right Brake Temperature Graph")
     fig.update_layout(xaxis=dict(rangeslider=dict(visible=True), type="linear"))
     return fig
@@ -834,7 +833,7 @@ def update_graph(n_intervals, n_clicks):
 )
 def update_br_brk_tmp_grad_bar(n_intervals):
     data = pd.read_csv(file)
-    value = data['br_brk_tmp']
+    value = data['BR_BRK_TMP']
     value = abs(value[len(value) - 1])
     return value
 
@@ -852,7 +851,7 @@ def update_graph(n_intervals, n_clicks):
     if n_clicks % 2 == 0:
         raise PreventUpdate
     data = pd.read_csv(file)
-    fig = go.Figure(go.Scatter(x=data['time'], y=data['f_brk_pres']))
+    fig = go.Figure(go.Scatter(x=data['Time'], y=data['F_BRK_PRES']))
     fig.update_layout(title_text="Front Brake Pressure Graph")
     fig.update_layout(xaxis=dict(rangeslider=dict(visible=True), type="linear"))
     return fig
@@ -864,7 +863,7 @@ def update_graph(n_intervals, n_clicks):
 )
 def update_f_brk_pres_grad_bar(n_intervals):
     data = pd.read_csv(file)
-    value = data['f_brk_pres']
+    value = data['F_BRK_PRES']
     value = abs(value[len(value) - 1])
     return value
 
@@ -882,7 +881,7 @@ def update_graph(n_intervals, n_clicks):
     if n_clicks % 2 == 0:
         raise PreventUpdate
     data = pd.read_csv(file)
-    fig = go.Figure(go.Scatter(x=data['time'], y=data['b_brk_pres']))
+    fig = go.Figure(go.Scatter(x=data['Time'], y=data['B_BRK_PRES']))
     fig.update_layout(title_text="Back Brake Pressure Graph")
     fig.update_layout(xaxis=dict(rangeslider=dict(visible=True), type="linear"))
     return fig
@@ -894,7 +893,7 @@ def update_graph(n_intervals, n_clicks):
 )
 def update_b_brk_pres_grad_bar(n_intervals):
     data = pd.read_csv(file)
-    value = data['b_brk_pres']
+    value = data['B_BRK_PRES']
     value = abs(value[len(value) - 1])
     return value
 
@@ -912,7 +911,7 @@ def update_graph(n_intervals, n_clicks):
     if n_clicks % 2 == 0:
         raise PreventUpdate
     data = pd.read_csv(file)
-    fig = go.Figure(go.Scatter(x=data['time'], y=data['cool_temp']))
+    fig = go.Figure(go.Scatter(x=data['Time'], y=data['COOL_TEMP']))
     fig.update_layout(title_text="Coolant Temperature Graph")
     fig.update_layout(xaxis=dict(rangeslider=dict(visible=True), type="linear"))
     return fig
@@ -924,7 +923,7 @@ def update_graph(n_intervals, n_clicks):
 )
 def update_cool_temp_grad_bar(n_intervals):
     data = pd.read_csv(file)
-    value = data['cool_temp']
+    value = data['COOL_TEMP']
     value = abs(value[len(value) - 1])
     return value
 
@@ -943,7 +942,7 @@ def update_accel_graph(n_intervals, n_clicks):
     if n_clicks % 2 == 0:
         raise PreventUpdate
     data = pd.read_csv(file)
-    fig = go.Figure(go.Scatter(x=data['time'], y=data['accel']))
+    fig = go.Figure(go.Scatter(x=data['Time'], y=data['ACCEL']))
     fig.update_layout(title_text="Accelerometer Graph")
     fig.update_layout(xaxis=dict(rangeslider=dict(visible=True), type="linear"))
     return fig
@@ -955,7 +954,7 @@ def update_accel_graph(n_intervals, n_clicks):
 )
 def update_accel_grad_bar(n_intervals):
     data = pd.read_csv(file)
-    value = data['accel']
+    value = data['ACCEL']
     value = abs(value[len(value) - 1])
     return value
 
@@ -974,7 +973,7 @@ def update_gyro_graph(n_intervals, n_clicks):
     if n_clicks % 2 == 0:
         raise PreventUpdate
     data = pd.read_csv(file)
-    fig = go.Figure(go.Scatter(x=data['time'], y=data['gyro']))
+    fig = go.Figure(go.Scatter(x=data['Time'], y=data['GYRO']))
     fig.update_layout(title_text="Gyroscope Graph")
     fig.update_layout(xaxis=dict(rangeslider=dict(visible=True), type="linear"))
     return fig
@@ -986,7 +985,7 @@ def update_gyro_graph(n_intervals, n_clicks):
 )
 def update_gyro_grad_bar(n_intervals):
     data = pd.read_csv(file)
-    value = data['gyro']
+    value = data['GYRO']
     value = abs(value[len(value) - 1])
     return value
 
