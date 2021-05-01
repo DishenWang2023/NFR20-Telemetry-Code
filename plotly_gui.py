@@ -99,7 +99,7 @@ app.layout = html.Div([
                                     "ranges": {"green": [0, 1.5], "yellow": [1.5, 1.75], "red": [1.75, 2]}},
                              showCurrentValue=True,
                              size=1000,
-                             max=2,
+                             max=2 ^ (1 / 2 / 3 / 4),
                              ),
             html.H4("Front Left Suspension Potentiometer"),
             daq.GraduatedBar(id='fl_sus_pot_grad_bar',
@@ -107,7 +107,7 @@ app.layout = html.Div([
                                     "ranges": {"green": [0, 0.8], "yellow": [0.8, 0.9], "red": [0.9, 1]}},
                              showCurrentValue=True,
                              size=1000,
-                             max=1,
+                             max=6.5,
                              ),
             html.H4("Front Right Suspension Potentiometer"),
             daq.GraduatedBar(id='fr_sus_pot_grad_bar',
@@ -115,7 +115,7 @@ app.layout = html.Div([
                                     "ranges": {"green": [0, 0.8], "yellow": [0.8, 0.9], "red": [0.9, 1]}},
                              showCurrentValue=True,
                              size=1000,
-                             max=1,
+                             max=6.5,
                              ),
             html.H4("Back Left Suspension Potentiometer"),
             daq.GraduatedBar(id='bl_sus_pot_grad_bar',
@@ -123,7 +123,7 @@ app.layout = html.Div([
                                     "ranges": {"green": [0, 0.8], "yellow": [0.8, 0.9], "red": [0.9, 1]}},
                              showCurrentValue=True,
                              size=1000,
-                             max=1,
+                             max=6.5,
                              ),
             html.H4("Back Right Suspension Potentiometer"),
             daq.GraduatedBar(id='br_sus_pot_grad_bar',
@@ -131,7 +131,7 @@ app.layout = html.Div([
                                     "ranges": {"green": [0, 0.8], "yellow": [0.8, 0.9], "red": [0.9, 1]}},
                              showCurrentValue=True,
                              size=1000,
-                             max=1,
+                             max=6.5,
                              ),
             html.H4("Steering Angle"),
             daq.GraduatedBar(id='steer_ang_grad_bar',
@@ -155,7 +155,7 @@ app.layout = html.Div([
                                     "ranges": {"green": [0, 80], "yellow": [80, 90], "red": [90, 95]}},
                              showCurrentValue=True,
                              size=1000,
-                             max=95,
+                             max=100,
                              ),
             html.H4("Oil Temperature"),
             daq.GraduatedBar(id='oil_temp_grad_bar',
@@ -163,7 +163,7 @@ app.layout = html.Div([
                                     "ranges": {"green": [0, 260], "yellow": [260, 270], "red": [270, 280]}},
                              showCurrentValue=True,
                              size=1000,
-                             max=280,
+                             max=150,
                              ),
             html.H4("Intake Manifold Air Pressure"),
             daq.GraduatedBar(id='map_grad_bar',
@@ -187,7 +187,7 @@ app.layout = html.Div([
                                     "ranges": {"green": [0, 35], "yellow": [35, 40], "red": [40, 45]}},
                              showCurrentValue=True,
                              size=1000,
-                             max=45,
+                             max=(1/2/4/8) * 250,
                              ),
             html.H4("Front Left Brake Temperature"),
             daq.GraduatedBar(id='fl_brk_tmp_grad_bar',
@@ -195,7 +195,7 @@ app.layout = html.Div([
                                     "ranges": {"green": [0, 350], "yellow": [350, 375], "red": [375, 400]}},
                              showCurrentValue=True,
                              size=1000,
-                             max=400,
+                             max=800,
                              ),
             html.H4("Front Right Brake Temperature"),
             daq.GraduatedBar(id='fr_brk_tmp_grad_bar',
@@ -203,7 +203,7 @@ app.layout = html.Div([
                                     "ranges": {"green": [0, 350], "yellow": [350, 375], "red": [375, 400]}},
                              showCurrentValue=True,
                              size=1000,
-                             max=400,
+                             max=800,
                              ),
             html.H4("Back Left Brake Temperature"),
             daq.GraduatedBar(id='bl_brk_tmp_grad_bar',
@@ -211,7 +211,7 @@ app.layout = html.Div([
                                     "ranges": {"green": [0, 350], "yellow": [350, 375], "red": [375, 400]}},
                              showCurrentValue=True,
                              size=1000,
-                             max=400,
+                             max=800,
                              ),
             html.H4("Back Right Brake Temperature"),
             daq.GraduatedBar(id='br_brk_tmp_grad_bar',
@@ -219,7 +219,7 @@ app.layout = html.Div([
                                     "ranges": {"green": [0, 350], "yellow": [350, 375], "red": [375, 400]}},
                              showCurrentValue=True,
                              size=1000,
-                             max=400,
+                             max=800,
                              ),
             html.H4("Front Brake Pressure"),
             daq.GraduatedBar(id='f_brk_pres_grad_bar',
@@ -227,7 +227,7 @@ app.layout = html.Div([
                                     "ranges": {"green": [0, 250], "yellow": [250, 275], "red": [275, 300]}},
                              showCurrentValue=True,
                              size=1000,
-                             max=300,
+                             max=1000,
                              ),
             html.H4("Back Brake Pressure"),
             daq.GraduatedBar(id='b_brk_pres_grad_bar',
@@ -235,7 +235,7 @@ app.layout = html.Div([
                                     "ranges": {"green": [0, 250], "yellow": [250, 275], "red": [275, 300]}},
                              showCurrentValue=True,
                              size=1000,
-                             max=300,
+                             max=1000,
                              ),
             html.H4("Coolant Temperature"),
             daq.GraduatedBar(id='cool_temp_grad_bar',
@@ -243,7 +243,7 @@ app.layout = html.Div([
                                     "ranges": {"green": [0, 95], "yellow": [95, 100], "red": [100, 105]}},
                              showCurrentValue=True,
                              size=1000,
-                             max=105,
+                             max=150,
                              ),
         ]),
 
@@ -336,6 +336,7 @@ def update_vs_gauge(n_intervals):
     br = abs(data['BR_VSS'])
     bl = abs(data['BL_VSS'])
     return (fr[len(fr) - 1] + fl[len(fl) - 1] + br[len(br) - 1] + bl[len(bl) - 1]) / 4
+
 
 # <editor-fold desc="Updating Graphs">
 # <editor-fold desc="FL_VSS_GRAPH">
@@ -454,6 +455,7 @@ def update_br_vss_grad_bar(n_intervals):
     value = abs(value[len(value) - 1])
     return value
 
+
 # </editor-fold>
 
 
@@ -482,6 +484,8 @@ def update_fl_sus_pot_grad_bar(n_intervals):
     value = data['FL_SUS_POT']
     value = abs(value[len(value) - 1])
     return value
+
+
 # </editor-fold>
 
 
@@ -510,6 +514,7 @@ def update_fr_sus_pot_grad_bar(n_intervals):
     value = data['FR_SUS_POT']
     value = abs(value[len(value) - 1])
     return value
+
 
 # </editor-fold>
 
@@ -540,6 +545,7 @@ def update_bl_sus_pot_grad_bar(n_intervals):
     value = abs(value[len(value) - 1])
     return value
 
+
 # </editor-fold>
 
 # <editor-fold desc="BR_SUS_POT_GRAPH">
@@ -568,6 +574,7 @@ def update_br_sus_pot_grad_bar(n_intervals):
     value = abs(value[len(value) - 1])
     return value
 
+
 # </editor-fold>
 
 # <editor-fold desc="STEER_ANG_GRAPH">
@@ -595,6 +602,7 @@ def update_steer_ang_grad_bar(n_intervals):
     value = data['STEER_ANG']
     value = abs(value[len(value) - 1])
     return value
+
 
 # </editor-fold>
 
@@ -627,6 +635,7 @@ def update_tps_grad_bar(n_intervals):
     value = abs(value[len(value) - 1])
     return value, value
 
+
 # </editor-fold>
 
 # <editor-fold desc="OIL_PRES_GRAPH">
@@ -656,6 +665,7 @@ def update_oil_pres_grad_bar(n_intervals):
     value = data['OIL_PRES']
     value = abs(value[len(value) - 1])
     return value
+
 
 # </editor-fold>
 
@@ -687,6 +697,7 @@ def update_map_grad_bar(n_intervals):
     value = abs(value[len(value) - 1])
     return value
 
+
 # </editor-fold>
 
 # <editor-fold desc="MAT_GRAPH">
@@ -716,6 +727,7 @@ def update_mat_grad_bar(n_intervals):
     value = data['MAT']
     value = abs(value[len(value) - 1])
     return value
+
 
 # </editor-fold>
 
@@ -747,6 +759,7 @@ def update_fl_brk_tmp_grad_bar(n_intervals):
     value = abs(value[len(value) - 1])
     return value
 
+
 # </editor-fold>
 
 # <editor-fold desc="FR_BRK_TMP_GRAPH">
@@ -776,6 +789,7 @@ def update_fr_brk_tmp_grad_bar(n_intervals):
     value = data['FR_BRK_TMP']
     value = abs(value[len(value) - 1])
     return value
+
 
 # </editor-fold>
 
@@ -807,6 +821,7 @@ def update_bl_brk_tmp_grad_bar(n_intervals):
     value = abs(value[len(value) - 1])
     return value
 
+
 # </editor-fold>
 
 # <editor-fold desc="BR_BRK_TMP_GRAPH">
@@ -836,6 +851,7 @@ def update_br_brk_tmp_grad_bar(n_intervals):
     value = data['BR_BRK_TMP']
     value = abs(value[len(value) - 1])
     return value
+
 
 # </editor-fold>
 
@@ -867,6 +883,7 @@ def update_f_brk_pres_grad_bar(n_intervals):
     value = abs(value[len(value) - 1])
     return value
 
+
 # </editor-fold>
 
 # <editor-fold desc="B_BRK_PRES_GRAPH">
@@ -897,6 +914,7 @@ def update_b_brk_pres_grad_bar(n_intervals):
     value = abs(value[len(value) - 1])
     return value
 
+
 # </editor-fold>
 
 # <editor-fold desc="COOL_TEMP_GRAPH">
@@ -926,6 +944,7 @@ def update_cool_temp_grad_bar(n_intervals):
     value = data['COOL_TEMP']
     value = abs(value[len(value) - 1])
     return value
+
 
 # </editor-fold>
 
@@ -958,6 +977,7 @@ def update_accel_grad_bar(n_intervals):
     value = abs(value[len(value) - 1])
     return value
 
+
 # </editor-fold>
 
 
@@ -988,6 +1008,7 @@ def update_gyro_grad_bar(n_intervals):
     value = data['GYRO']
     value = abs(value[len(value) - 1])
     return value
+
 
 # </editor-fold>
 # </editor-fold>
