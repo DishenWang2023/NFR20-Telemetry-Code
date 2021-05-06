@@ -41,19 +41,18 @@ time.sleep(1)
 
 index = 0
 start_time = time.time()
-size = 27 * 2 # 27
+size = 28 * 2 # 27
 id_bytes = b'\x80\x01'
 
-sig_list = np.array([0, 0, 1, 2, 0, 0, 1, 2,
-                    1, 1, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 3, 3, 3, 2, 1,
-                    0, 1])  # multiplications for each sensor values turning short back to float
+sig_list = np.array([1, 1, 1, 1, 1, 1, 1, 1,
+                    1, 1, 1, 1, 1, 1, 1, 1,
+                    1, 1, 1, 1, 1, 1, 1, 1,
+                    1, 1, 1])  # multiplications for each sensor values turning short back to float
 
 # sig_list = np.array([0,0,0])
 tc.csv_create_header(csv_name, sl.sensor_names)
 
-"""___TODO___
-"""
+
 while True:
     current_time = round(time.time() - start_time, 2)
     ''' read input stream, works like a stack '''
