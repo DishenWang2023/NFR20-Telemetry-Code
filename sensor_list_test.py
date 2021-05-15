@@ -30,7 +30,7 @@ hp_sens = {
     'accel':{
         'label': 'Accelerometer',
         'id': 'accel',
-        'units': '',
+        'units': 'Gs',
         'min_value': 0,
         'max_value': 16
     }
@@ -40,13 +40,13 @@ mp_sens = {
     'fl_sus_pot': {
         'label': 'Front Left Suspension Potentiometer',
         'id': 'fl_sus_pot',
-        'units': 'MPH',
+        'units': 'in.',
         'min_value': 0,
         'max_value': 6.5,
     },
     'fr_sus_pot': {
         'label': 'Front Right Suspension Potentiometer',
-        'units': 'MPH',
+        'units': 'in.',
         'id': 'fr_sus_pot',
         'min_value': 0,
         'max_value': 6.5,
@@ -54,28 +54,28 @@ mp_sens = {
     'bl_sus_pot': {
         'label': 'Back Left Suspension Potentiometer',
         'id': 'bl_sus_pot',
-        'units': 'MPH',
+        'units': 'in.',
         'min_value': 0,
         'max_value': 6.5,
     },
     'br_sus_pot': {
         'label': 'Back Right Suspension Potentiometer',
         'id': 'br_sus_pot',
-        'units': 'MPH',
+        'units': 'in.',
         'min_value': 0,
         'max_value': 6.5,
     },
     'steer_ang': {
         'label': 'Steering Angle',
         'id': 'steer_ang',
-        'units': 'MPH',
+        'units': 'degrees',
         'min_value': -180,
         'max_value': 180,
     },
     'gyro': {
         'label': 'Gyroscope',
         'id': 'gyro',
-        'units': 'MPH',
+        'units': 'degrees/s',
         'min_value': -4*250,
         'max_value': 4*250,
     }
@@ -85,35 +85,35 @@ lp_sens = {
     'tps': {
         'label': 'Throttle Position',
         'id': 'tps',
-        'units': 'MPH',
+        'units': '%',
         'min_value': 0,
         'max_value': 90,
     },
     'oil_pres': {
         'label': 'Oil Pressure',
         'id': 'oil_pres',
-        'units': 'MPH',
+        'units': 'PSI',
         'min_value': 0,
         'max_value': 100,
     },
     'oil_temp': {
         'label': 'Oil Temperature',
         'id': 'oil_temp',
-        'units': 'MPH',
+        'units': 'Fahrenheit',
         'min_value': -80,
         'max_value': 150,
     },
     'map': {
         'label': 'Intake Manifold Air Pressure',
         'id': 'map',
-        'units': 'MPH',
+        'units': 'Pa',
         'min_value': 0,
         'max_value': 100,
     },
     'mat': {
         'label': 'Intake Manifold Air Temperature',
         'id': 'mat',
-        'units': 'MPH',
+        'units': 'Celsius',
         'min_value': 0,
         'max_value': 100,
     }

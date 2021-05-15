@@ -4,7 +4,8 @@ import dash_html_components as html
 import dash_daq as daq
 import pandas as pd
 import plotly.graph_objs as go
-import sensor_list as sensors
+import sensor_list_test as sensors
+from dash.dash import no_update
 from dash.exceptions import PreventUpdate
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -12,44 +13,58 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 colors = {
-    'background': '#111111',
-    'text': '#7FDBFF'
+    'background': '#4E2A84',
+    'text': '#FFFFFF'
 }
 
 # change this file that the csv is stored in
 file = 'TelemetryData/data.csv'
-
 df = pd.read_csv(file)
 num_clicks = 1
 
 
-def create_options():
+def all_sensors():
     result = []
     for sensor in sensors.hp_sens:
-        result.append({'label': sensors.hp_sens[sensor]['label'],
-                       'value': sensors.hp_sens[sensor]['id']})
+        result.append(sensors.hp_sens[sensor])
     for sensor in sensors.mp_sens:
-        result.append({'label': sensors.mp_sens[sensor]['label'],
-                       'value': sensors.mp_sens[sensor]['id']})
+        result.append(sensors.mp_sens[sensor])
     for sensor in sensors.lp_sens:
-        result.append({'label': sensors.lp_sens[sensor]['label'],
-                       'value': sensors.lp_sens[sensor]['id']})
+        result.append(sensors.lp_sens[sensor])
     for sensor in sensors.s_sens:
-        result.append({'label': sensors.s_sens[sensor]['label'],
-                       'value': sensors.s_sens[sensor]['id']})
+        result.append(sensors.s_sens[sensor])
+    return result
+
+
+all_sensors_lst = all_sensors()
+
+
+def create_options():
+    result = []
+    for i in range(len(all_sensors_lst)):
+        result.append({'label': all_sensors_lst[i]['label'],
+                       'value': all_sensors_lst[i]['id']})
     return result
 
 
 app.layout = html.Div([
     html.Div(
+        style={'backgroundColor': colors['background']},
         id="banner",
         className="banner",
         children=[
             html.Div(
                 id="banner-text",
                 children=[
-                    html.H5("Northwestern Formula Racing"),
-                    html.H6("Telemetry Data")])]),
+                    html.H4(children="Northwestern Formula Racing",
+                            style={'color': colors['text'],
+                                   'textAlign': 'center',
+                                   'font-family': 'campton'}),
+                    html.H6(children="Telemetry Data",
+                            style={'color': colors['text'],
+                                   'textAlign': 'center',
+                                   'font-family': 'campton'})]
+            )]),
     html.Button('Pause/Resume', id='pause-button', n_clicks=1),
     html.Div(id='container-button-basic'),
     dcc.Tabs([
@@ -77,103 +92,12 @@ app.layout = html.Div([
 ])
 
 
-# Updating the button
-@app.callback(
-    dash.dependencies.Output('container-button-basic', 'children'),
-    [dash.dependencies.Input('pause-button', 'n_clicks')]
-)
-def update_button(n_clicks):
-    if n_clicks % 2 == 1:
-        return 'The live graphs are currently being updated.'
-    elif n_clicks % 2 == 0:
-        return 'The live graphs are currently paused.'
-    else:
-        return 'There is a problem.'
-
-
-# Updating the FL_VSS components
-@app.callback(
-    dash.dependencies.Output('dropdown-gauge_show', 'max'),
-    dash.dependencies.Output('dropdown-gauge_show', 'min'),
-    dash.dependencies.Output('dropdown-gauge_show', 'units'),
-    dash.dependencies.Output('dropdown-gauge_show', 'label'),
-    dash.dependencies.Output('dropdown-gauge_show', 'value'),
-    dash.dependencies.Output('dropdown-graph_show', 'figure'),
-    [dash.dependencies.Input('dropdown-gauge', 'value'),
-     dash.dependencies.Input('dropdown-graph', 'value'),
-     dash.dependencies.Input('interval-component', 'n_intervals')]
-)
-def update_front_page(id_gauge, id_graph, n_intervals):
-    if id_gauge in sensors.hp_sens:
-        sensor_gauge = sensors.hp_sens[id_gauge]
-    elif id_gauge in sensors.mp_sens:
-        sensor_gauge = sensors.mp_sens[id_gauge]
-    elif id_gauge in sensors.lp_sens:
-        sensor_gauge = sensors.lp_sens[id_gauge]
-    elif id_gauge in sensors.s_sens:
-        sensor_gauge = sensors.s_sens[id_gauge]
-    else:
-        raise PreventUpdate
-
-    if id_graph in sensors.hp_sens:
-        sensor_graph = sensors.hp_sens[id_graph]
-    elif id_graph in sensors.mp_sens:
-        sensor_graph = sensors.mp_sens[id_graph]
-    elif id_graph in sensors.lp_sens:
-        sensor_graph = sensors.lp_sens[id_graph]
-    elif id_graph in sensors.s_sens:
-        sensor_graph = sensors.s_sens[id_graph]
-    else:
-        raise PreventUpdate
-
-    data = pd.read_csv(file)
-    maxVal = sensor_gauge['max_value']
-    minVal = sensor_gauge['min_value']
-    units = sensor_gauge['units']
-    label = sensor_gauge['label']
-    value = data[sensor_gauge['id']][len(data) - 1]
-    figure = go.Figure(go.Scatter(x=data['time'], y=data[sensor_graph['id']])).update_layout(
-                         xaxis=dict(rangeslider=dict(visible=True), type="linear"))
-    return maxVal, minVal, units, label, value, figure
-
-
-def create_grad_bar(sensor, data):
-    maxVal = sensor['max_value']
-    minVal = sensor['min_value']
-    return daq.GraduatedBar(id=sensor['id'] + "_grad_bar",
-                            color={"ranges": {"green": [minVal, maxVal * .8],
-                                              "yellow": [maxVal * .8, maxVal * .9],
-                                              "red": [maxVal * .9, maxVal]}},
-                            showCurrentValue=True, size=1000, max=maxVal,
-                            step=(abs(minVal) + abs(maxVal)) / 100,
-                            value=abs(data[sensor['id']][len(data) - 1]))
-
-
-@app.callback(
-    dash.dependencies.Output('all_sensors_tab', 'children'),
-    [dash.dependencies.Input('interval-component', 'n_intervals')]
-)
-def update_all_sensors_tab(n_intervals):
-    data = pd.read_csv(file)
-    result = []
-    for sensor in sensors.hp_sens:
-        result.append(create_header(sensors.hp_sens[sensor]))
-        result.append(create_grad_bar(sensors.hp_sens[sensor], data))
-    for sensor in sensors.mp_sens:
-        result.append(create_header(sensors.mp_sens[sensor]))
-        result.append(create_grad_bar(sensors.mp_sens[sensor], data))
-    for sensor in sensors.lp_sens:
-        result.append(create_header(sensors.lp_sens[sensor]))
-        result.append(create_grad_bar(sensors.lp_sens[sensor], data))
-    for sensor in sensors.s_sens:
-        result.append(create_header(sensors.s_sens[sensor]))
-        result.append(create_grad_bar(sensors.s_sens[sensor], data))
-    return result
+# ____________________________________________________________
+# Helper Functions
 
 
 def create_header(sensor):
-    result = sensor['label']
-    return html.H3(result)
+    return html.H3(sensor['label'])
 
 
 def create_graph(sensor, data):
@@ -190,23 +114,105 @@ def create_graphs(sensors_lst, data):
     return result
 
 
+def create_grad_bar(sensor, data):
+    maxVal = sensor['max_value']
+    minVal = sensor['min_value']
+    return daq.GraduatedBar(id=sensor['id'] + "_grad_bar",
+                            color={"ranges": {"green": [minVal, maxVal * .8],
+                                              "yellow": [maxVal * .8, maxVal * .9],
+                                              "red": [maxVal * .9, maxVal]}},
+                            showCurrentValue=True, size=1000, max=maxVal,
+                            step=(abs(minVal) + abs(maxVal)) / 100,
+                            value=abs(data[sensor['id']][len(data) - 1]))
+
+
+def create_grad_bars(data):
+    result = []
+    for i in range(len(all_sensors_lst)):
+        result.append(create_header(all_sensors_lst[i]))
+        result.append(create_grad_bar(all_sensors_lst[i], data))
+    return result
+
+
+def find_sensor_given_id(id):
+    if id in sensors.hp_sens:
+        return sensors.hp_sens[id]
+    elif id in sensors.mp_sens:
+        return sensors.mp_sens[id]
+    elif id in sensors.lp_sens:
+        return sensors.lp_sens[id]
+    elif id in sensors.s_sens:
+        return sensors.s_sens[id]
+    else:
+        return False
+
+
+# ____________________________________________________________
+# Callbacks
+
+
+# ____________________________________________________________
+# Dropdown graph and gauge
 @app.callback(
+    dash.dependencies.Output('dropdown-gauge_show', 'max'),
+    dash.dependencies.Output('dropdown-gauge_show', 'min'),
+    dash.dependencies.Output('dropdown-gauge_show', 'units'),
+    dash.dependencies.Output('dropdown-gauge_show', 'label'),
+    dash.dependencies.Output('dropdown-gauge_show', 'value'),
+    dash.dependencies.Output('dropdown-graph_show', 'figure'),
+    dash.dependencies.Output('all_sensors_tab', 'children'),
+    dash.dependencies.Output('container-button-basic', 'children'),
     dash.dependencies.Output('high_sensors_tab', 'children'),
     dash.dependencies.Output('medium_sensors_tab', 'children'),
     dash.dependencies.Output('low_sensors_tab', 'children'),
     dash.dependencies.Output('safety_sensors_tab', 'children'),
-    [dash.dependencies.Input('pause-button', 'n_clicks'),
-     dash.dependencies.Input('interval-component', 'n_intervals')]
+    [dash.dependencies.Input('dropdown-gauge', 'value'),
+     dash.dependencies.Input('dropdown-graph', 'value'),
+     dash.dependencies.Input('interval-component', 'n_intervals'),
+     dash.dependencies.Input('pause-button', 'n_clicks')]
 )
-def update_graphs(n_clicks, n_intervals):
-    if n_clicks % 2 == 0:
-        raise PreventUpdate
+def update_front_page(id_gauge, id_graph, n_intervals, n_clicks):
     data = pd.read_csv(file)
-    high_children = create_graphs(sensors.hp_sens, data)
-    medium_children = create_graphs(sensors.mp_sens, data)
-    low_children = create_graphs(sensors.lp_sens, data)
-    safety_children = create_graphs(sensors.s_sens, data)
-    return high_children, medium_children, low_children, safety_children
+    if n_clicks % 2 == 1:
+        clicks = 'The live graphs are currently being updated.'
+        high_children = create_graphs(sensors.hp_sens, data)
+        medium_children = create_graphs(sensors.mp_sens, data)
+        low_children = create_graphs(sensors.lp_sens, data)
+        safety_children = create_graphs(sensors.s_sens, data)
+        sensor_graph = find_sensor_given_id(id_graph)
+        if sensor_graph:
+            figure = go.Figure(go.Scatter(x=data['time'], y=data[sensor_graph['id']])).update_layout(
+                xaxis=dict(rangeslider=dict(visible=True), type="linear"))
+        else:
+            figure = no_update
+    else:
+        clicks = 'The live graphs are currently paused.'
+        high_children = no_update
+        medium_children = no_update
+        low_children = no_update
+        safety_children = no_update
+        figure = no_update
+
+    sensor_gauge = find_sensor_given_id(id_gauge)
+    if sensor_gauge:
+        maxVal = sensor_gauge['max_value']
+        minVal = sensor_gauge['min_value']
+        units = sensor_gauge['units']
+        label = sensor_gauge['label']
+        value = data[sensor_gauge['id']][len(data) - 1]
+    else:
+        maxVal = no_update
+        minVal = no_update
+        units = no_update
+        label = no_update
+        value = no_update
+
+    # Updates the gauge and the graph on the quick overview tab
+
+    # Updates the children for the all sensors tab
+    children = create_grad_bars(data)
+
+    return maxVal, minVal, units, label, value, figure, children, clicks, high_children, medium_children, low_children, safety_children
 
 
 if __name__ == '__main__':
