@@ -19,9 +19,12 @@ colors = {
 
 # change this file that the csv is stored in
 file = 'TelemetryData/data.csv'
-df = pd.read_csv(file)
 num_clicks = 1
+refresh_rate = (1/10 * 1000)  # change the first number of the denominator to the refreshes you want per second
+df = pd.read_csv(file)
 
+class variables:
+    most_recent_time = df['time'][len(df)-1]
 
 def all_sensors():
     result = []
@@ -67,8 +70,8 @@ app.layout = html.Div([
             )]),
     html.Button('Pause/Resume', id='pause-button', n_clicks=1),
     html.Div(id='container-button-basic'),
-    dcc.Tabs([
-        dcc.Tab(label='Quick Overview', children=[
+    dcc.Tabs(id='tabs', value="qo_tab", children=[
+        dcc.Tab(id='qo_tab', label='Quick Overview', value='qo_tab', children=[
             dcc.Dropdown(id='dropdown-graph',
                          options=create_options(),
                          value='fl_vss'),
@@ -79,15 +82,15 @@ app.layout = html.Div([
             daq.Gauge(id='dropdown-gauge_show',
                       showCurrentValue=True)
         ]),
-        dcc.Tab(id="all_sensors_tab", label="All Sensors"),
-        dcc.Tab(id="high_sensors_tab", label='High Priority Sensors'),
-        dcc.Tab(id="medium_sensors_tab", label='Medium Priority Sensors'),
-        dcc.Tab(id="low_sensors_tab", label='Low Priority Sensors'),
-        dcc.Tab(id="safety_sensors_tab", label='Safety Sensors'),
+        dcc.Tab(id="all_sensors_tab", label="All Sensors", value='all_sensors_tab'),
+        dcc.Tab(id="high_sensors_tab", label='High Priority Sensors', value='high_sensors_tab'),
+        dcc.Tab(id="medium_sensors_tab", label='Medium Priority Sensors', value='medium_sensors_tab'),
+        dcc.Tab(id="low_sensors_tab", label='Low Priority Sensors', value='low_sensors_tab'),
+        dcc.Tab(id="safety_sensors_tab", label='Safety Sensors', value='safety_sensors_tab'),
     ]),
     dcc.Interval(
         id='interval-component',
-        interval=1 * 1000,  # in milliseconds
+        interval= refresh_rate,  # in milliseconds
     )
 ])
 
@@ -103,6 +106,7 @@ def create_header(sensor):
 def create_graph(sensor, data):
     return dcc.Graph(id=sensor['id'] + "_graph",
                      figure=go.Figure(go.Scatter(x=data['time'], y=data[sensor['id']])).update_layout(
+                         title_text=sensor['label'] + " Graph",
                          xaxis=dict(rangeslider=dict(visible=True), type="linear")))
 
 
@@ -160,8 +164,9 @@ def find_sensor_given_id(id):
     dash.dependencies.Output('dropdown-gauge_show', 'label'),
     dash.dependencies.Output('dropdown-gauge_show', 'value'),
     dash.dependencies.Output('dropdown-graph_show', 'figure'),
-    dash.dependencies.Output('all_sensors_tab', 'children'),
     dash.dependencies.Output('container-button-basic', 'children'),
+    dash.dependencies.Output('qo_tab', 'children'),
+    dash.dependencies.Output('all_sensors_tab', 'children'),
     dash.dependencies.Output('high_sensors_tab', 'children'),
     dash.dependencies.Output('medium_sensors_tab', 'children'),
     dash.dependencies.Output('low_sensors_tab', 'children'),
@@ -169,28 +174,48 @@ def find_sensor_given_id(id):
     [dash.dependencies.Input('dropdown-gauge', 'value'),
      dash.dependencies.Input('dropdown-graph', 'value'),
      dash.dependencies.Input('interval-component', 'n_intervals'),
-     dash.dependencies.Input('pause-button', 'n_clicks')]
+     dash.dependencies.Input('pause-button', 'n_clicks'),
+     dash.dependencies.Input('tabs', 'value')]
 )
-def update_front_page(id_gauge, id_graph, n_intervals, n_clicks):
+def update_front_page(id_gauge, id_graph, n_intervals, n_clicks, active_tab):
     data = pd.read_csv(file)
+    if data['time'][len(data)-1] == variables.most_recent_time:
+        variables.most_recent_time = variables.most_recent_time
+        # return no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update
+
+        # remove this comment if you want the page to update ONLY when a
+        # new piece of data is received, this can improve efficiency but if you switch tabs, it will take until the
+        # next piece of data is received to load the tab
+    else:
+        variables.most_recent_time = data['time'][len(data)-1]
+
+    if active_tab == 'qo_tab':
+        return create_quick_overview_tab(id_gauge, id_graph, n_clicks, data)
+    elif active_tab == 'all_sensors_tab':
+        return create_all_sensors_tab(data, n_clicks)
+    elif active_tab == 'high_sensors_tab':
+        return create_high_sensors_tab(data, n_clicks)
+    elif active_tab == 'medium_sensors_tab':
+        return create_med_senors_tab(data, n_clicks)
+    elif active_tab == 'low_sensors_tab':
+        return create_low_sensors_tab(data, n_clicks)
+    elif active_tab == 'safety_sensors_tab':
+        return create_low_sensors_tab(data, n_clicks)
+    else:
+        raise PreventUpdate
+
+
+def create_quick_overview_tab(id_gauge, id_graph, n_clicks, data):
     if n_clicks % 2 == 1:
-        clicks = 'The live graphs are currently being updated.'
-        high_children = create_graphs(sensors.hp_sens, data)
-        medium_children = create_graphs(sensors.mp_sens, data)
-        low_children = create_graphs(sensors.lp_sens, data)
-        safety_children = create_graphs(sensors.s_sens, data)
+        button = 'The live graphs are currently being updated.'
         sensor_graph = find_sensor_given_id(id_graph)
         if sensor_graph:
             figure = go.Figure(go.Scatter(x=data['time'], y=data[sensor_graph['id']])).update_layout(
-                xaxis=dict(rangeslider=dict(visible=True), type="linear"))
+                title_text=sensor_graph['label'] + " Graph", xaxis=dict(rangeslider=dict(visible=True), type="linear"))
         else:
             figure = no_update
     else:
-        clicks = 'The live graphs are currently paused.'
-        high_children = no_update
-        medium_children = no_update
-        low_children = no_update
-        safety_children = no_update
+        button = 'The live graphs are currently paused.'
         figure = no_update
 
     sensor_gauge = find_sensor_given_id(id_gauge)
@@ -207,12 +232,56 @@ def update_front_page(id_gauge, id_graph, n_intervals, n_clicks):
         label = no_update
         value = no_update
 
-    # Updates the gauge and the graph on the quick overview tab
+    return maxVal, minVal, units, label, value, figure, button, no_update, no_update, no_update, no_update, no_update, no_update
 
-    # Updates the children for the all sensors tab
-    children = create_grad_bars(data)
 
-    return maxVal, minVal, units, label, value, figure, children, clicks, high_children, medium_children, low_children, safety_children
+def create_all_sensors_tab(data, n_clicks):
+    if n_clicks % 2 == 1:
+        button = 'The live graphs are currently being updated.'
+    else:
+        button = 'The live graphs are currently paused.'
+    all_children = create_grad_bars(data)
+    return no_update, no_update, no_update, no_update, no_update, no_update, button, no_update, all_children, no_update, no_update, no_update, no_update
+
+
+def create_high_sensors_tab(data, n_clicks):
+    if n_clicks % 2 == 1:
+        button = 'The live graphs are currently being updated.'
+        high_children = create_graphs(sensors.hp_sens, data)
+    else:
+        button = 'The live graphs are currently paused.'
+        high_children = no_update
+    return no_update, no_update, no_update, no_update, no_update, no_update, button, no_update, no_update, high_children, no_update, no_update, no_update
+
+
+def create_med_senors_tab(data, n_clicks):
+    if n_clicks % 2 == 1:
+        button = 'The live graphs are currently being updated.'
+        medium_children = create_graphs(sensors.mp_sens, data)
+    else:
+        button = 'The live graphs are currently paused.'
+        medium_children = no_update
+    return no_update, no_update, no_update, no_update, no_update, no_update, button, no_update, no_update, no_update, medium_children, no_update, no_update
+
+
+def create_low_sensors_tab(data, n_clicks):
+    if n_clicks % 2 == 1:
+        button = 'The live graphs are currently being updated.'
+        low_children = create_graphs(sensors.lp_sens, data)
+    else:
+        button = 'The live graphs are currently paused.'
+        low_children = no_update
+    return no_update, no_update, no_update, no_update, no_update, no_update, button, no_update, no_update, no_update, no_update, low_children, no_update
+
+
+def create_safe_sensors_tab(data, n_clicks):
+    if n_clicks % 2 == 1:
+        button = 'The live graphs are currently being updated.'
+        safety_children = create_graphs(sensors.s_sens, data)
+    else:
+        button = 'The live graphs are currently paused.'
+        safety_children = no_update
+    return no_update, no_update, no_update, no_update, no_update, no_update, button, no_update, no_update, no_update, no_update, no_update, safety_children
 
 
 if __name__ == '__main__':
