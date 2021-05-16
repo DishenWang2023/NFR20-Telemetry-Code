@@ -201,7 +201,7 @@ def update_front_page(id_gauges, id_graphs, n_intervals, n_clicks, active_tab):
     elif active_tab == 'low_sensors_tab':
         return create_low_sensors_tab(data, n_clicks)
     elif active_tab == 'safety_sensors_tab':
-        return create_low_sensors_tab(data, n_clicks)
+        return create_safe_sensors_tab(data, n_clicks)
     else:
         raise PreventUpdate
 
