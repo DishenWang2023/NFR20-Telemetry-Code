@@ -72,15 +72,18 @@ app.layout = html.Div([
     html.Div(id='container-button-basic'),
     dcc.Tabs(id='tabs', value="qo_tab", children=[
         dcc.Tab(id='qo_tab', label='Quick Overview', value='qo_tab', children=[
+            html.H4(children="Sensor Graphs"),
             dcc.Dropdown(id='dropdown-graph',
                          options=create_options(),
-                         value='fl_vss'),
-            dcc.Graph(id='dropdown-graph_show'),
+                         value=['fl_vss'],
+                         multi=True),
+            html.Div(id='qo_graphs'),
+            html.H4(children="Sensor Gauges"),
             dcc.Dropdown(id='dropdown-gauge',
                          options=create_options(),
-                         value='fl_vss'),
-            daq.Gauge(id='dropdown-gauge_show',
-                      showCurrentValue=True)
+                         value=['fl_vss'],
+                         multi=True),
+            html.Div(id='qo_gauges'),
         ]),
         dcc.Tab(id="all_sensors_tab", label="All Sensors", value='all_sensors_tab'),
         dcc.Tab(id="high_sensors_tab", label='High Priority Sensors', value='high_sensors_tab'),
@@ -158,26 +161,24 @@ def find_sensor_given_id(id):
 # ____________________________________________________________
 # Dropdown graph and gauge
 @app.callback(
-    dash.dependencies.Output('dropdown-gauge_show', 'max'),
-    dash.dependencies.Output('dropdown-gauge_show', 'min'),
-    dash.dependencies.Output('dropdown-gauge_show', 'units'),
-    dash.dependencies.Output('dropdown-gauge_show', 'label'),
-    dash.dependencies.Output('dropdown-gauge_show', 'value'),
-    dash.dependencies.Output('dropdown-graph_show', 'figure'),
-    dash.dependencies.Output('container-button-basic', 'children'),
-    dash.dependencies.Output('qo_tab', 'children'),
-    dash.dependencies.Output('all_sensors_tab', 'children'),
-    dash.dependencies.Output('high_sensors_tab', 'children'),
+    dash.dependencies.Output('qo_gauges', 'children'),
+
+    dash.dependencies.Output('qo_graphs', 'children'),  # The graph on the quick overview tab
+    dash.dependencies.Output('container-button-basic', 'children'),  # Updating the text under the button
+    dash.dependencies.Output('qo_tab', 'children'), # Updates the quick-overview tab
+    dash.dependencies.Output('all_sensors_tab', 'children'),  # Updates the all-sensors tab
+    dash.dependencies.Output('high_sensors_tab', 'children'),  # Updates the high priority sensors tab
     dash.dependencies.Output('medium_sensors_tab', 'children'),
     dash.dependencies.Output('low_sensors_tab', 'children'),
     dash.dependencies.Output('safety_sensors_tab', 'children'),
-    [dash.dependencies.Input('dropdown-gauge', 'value'),
-     dash.dependencies.Input('dropdown-graph', 'value'),
-     dash.dependencies.Input('interval-component', 'n_intervals'),
-     dash.dependencies.Input('pause-button', 'n_clicks'),
-     dash.dependencies.Input('tabs', 'value')]
+    [dash.dependencies.Input('dropdown-gauge', 'value'),  # determines which sensor will be on the gauge for the qo tab
+     dash.dependencies.Input('dropdown-graph', 'value'),  # determines which sensor will be on the graph for the qo tab
+     dash.dependencies.Input('interval-component', 'n_intervals'),  # allows the page to update according to the refresh rate
+     dash.dependencies.Input('pause-button', 'n_clicks'),  # determines whether the graphs are updating or not
+     dash.dependencies.Input('tabs', 'value')  # determines which tab the user is on
+     ]
 )
-def update_front_page(id_gauge, id_graph, n_intervals, n_clicks, active_tab):
+def update_front_page(id_gauges, id_graphs, n_intervals, n_clicks, active_tab):
     data = pd.read_csv(file)
     if data['time'][len(data)-1] == variables.most_recent_time:
         variables.most_recent_time = variables.most_recent_time
@@ -190,7 +191,7 @@ def update_front_page(id_gauge, id_graph, n_intervals, n_clicks, active_tab):
         variables.most_recent_time = data['time'][len(data)-1]
 
     if active_tab == 'qo_tab':
-        return create_quick_overview_tab(id_gauge, id_graph, n_clicks, data)
+        return create_quick_overview_tab(id_gauges, id_graphs, n_clicks, data)
     elif active_tab == 'all_sensors_tab':
         return create_all_sensors_tab(data, n_clicks)
     elif active_tab == 'high_sensors_tab':
@@ -205,34 +206,43 @@ def update_front_page(id_gauge, id_graph, n_intervals, n_clicks, active_tab):
         raise PreventUpdate
 
 
-def create_quick_overview_tab(id_gauge, id_graph, n_clicks, data):
+def create_quick_overview_tab(id_gauges, id_graphs, n_clicks, data):
     if n_clicks % 2 == 1:
         button = 'The live graphs are currently being updated.'
-        sensor_graph = find_sensor_given_id(id_graph)
-        if sensor_graph:
-            figure = go.Figure(go.Scatter(x=data['time'], y=data[sensor_graph['id']])).update_layout(
-                title_text=sensor_graph['label'] + " Graph", xaxis=dict(rangeslider=dict(visible=True), type="linear"))
-        else:
-            figure = no_update
+        graphs = []
+        for id_graph in id_graphs:
+            sensor_graph = find_sensor_given_id(id_graph)
+            if sensor_graph:
+                graphs.append(dcc.Graph(id=sensor_graph['id']+"_qo_graph",
+                                        figure=go.Figure(go.Scatter(x=data['time'], y=data[sensor_graph['id']])).update_layout(
+                                            title_text=sensor_graph['label'] + " Graph",
+                                            xaxis=dict(rangeslider=dict(visible=True), type="linear"))))
+            else:
+                raise PreventUpdate
     else:
         button = 'The live graphs are currently paused.'
         figure = no_update
 
-    sensor_gauge = find_sensor_given_id(id_gauge)
-    if sensor_gauge:
-        maxVal = sensor_gauge['max_value']
-        minVal = sensor_gauge['min_value']
-        units = sensor_gauge['units']
-        label = sensor_gauge['label']
-        value = data[sensor_gauge['id']][len(data) - 1]
-    else:
-        maxVal = no_update
-        minVal = no_update
-        units = no_update
-        label = no_update
-        value = no_update
+    gauges = []
+    for id_gauge in id_gauges:
+        sensor_gauge = find_sensor_given_id(id_gauge)
+        if sensor_gauge:
+            maxVal = sensor_gauge['max_value']
+            minVal = sensor_gauge['min_value']
+            gauge_unit = sensor_gauge['units']
+            gauge_label = sensor_gauge['label']
+            gauge_value = data[sensor_gauge['id']][len(data) - 1]
+            gauges.append(daq.Gauge(id=sensor_gauge['id']+"_qo_gauge",
+                                    max=maxVal,
+                                    min=minVal,
+                                    units=gauge_unit,
+                                    label=gauge_label,
+                                    value=gauge_value,
+                                    showCurrentValue=True))
+        else:
+            raise PreventUpdate
 
-    return maxVal, minVal, units, label, value, figure, button, no_update, no_update, no_update, no_update, no_update, no_update
+    return gauges, graphs, button, no_update, no_update, no_update, no_update, no_update, no_update
 
 
 def create_all_sensors_tab(data, n_clicks):
@@ -282,6 +292,10 @@ def create_safe_sensors_tab(data, n_clicks):
         button = 'The live graphs are currently paused.'
         safety_children = no_update
     return no_update, no_update, no_update, no_update, no_update, no_update, button, no_update, no_update, no_update, no_update, no_update, safety_children
+
+# Instead of graduated bars, do LED Displays, display in green if current value is greater than average of past 5 values
+# Have multi-valued dropdown menu instead of single valued
+# Be able to select what you want on each axis, including time for the graphs
 
 
 if __name__ == '__main__':
