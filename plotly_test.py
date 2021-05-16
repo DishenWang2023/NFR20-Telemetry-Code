@@ -9,8 +9,8 @@ from dash.dash import no_update
 from dash.exceptions import PreventUpdate
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets,update_title=None)
+app.title = 'NFR Telemetry'
 
 colors = {
     'background': '#4E2A84',
@@ -83,7 +83,7 @@ app.layout = html.Div([
                          options=create_options(),
                          value=['fl_vss'],
                          multi=True),
-            html.Div(id='qo_gauges'),
+            html.Center(id='qo_gauges'),
         ]),
         dcc.Tab(id="all_sensors_tab", label="All Sensors", value='all_sensors_tab'),
         dcc.Tab(id="high_sensors_tab", label='High Priority Sensors', value='high_sensors_tab'),
@@ -216,12 +216,12 @@ def create_quick_overview_tab(id_gauges, id_graphs, n_clicks, data):
                 graphs.append(dcc.Graph(id=sensor_graph['id']+"_qo_graph",
                                         figure=go.Figure(go.Scatter(x=data['time'], y=data[sensor_graph['id']])).update_layout(
                                             title_text=sensor_graph['label'] + " Graph",
-                                            xaxis=dict(rangeslider=dict(visible=True), type="linear"))))
+                                            xaxis=dict(rangeslider=dict(visible=False), type="linear"))))
             else:
                 raise PreventUpdate
     else:
         button = 'The live graphs are currently paused.'
-        figure = no_update
+        graphs = no_update
 
     gauges = []
     for id_gauge in id_gauges:
@@ -238,7 +238,9 @@ def create_quick_overview_tab(id_gauges, id_graphs, n_clicks, data):
                                     units=gauge_unit,
                                     label=gauge_label,
                                     value=gauge_value,
-                                    showCurrentValue=True))
+                                    showCurrentValue=True,
+                                    style={'display': 'inline-block',
+                                           'textAlign': 'center'}))
         else:
             raise PreventUpdate
 
@@ -251,7 +253,7 @@ def create_all_sensors_tab(data, n_clicks):
     else:
         button = 'The live graphs are currently paused.'
     all_children = create_grad_bars(data)
-    return no_update, no_update, no_update, no_update, no_update, no_update, button, no_update, all_children, no_update, no_update, no_update, no_update
+    return no_update, no_update, button, no_update, all_children, no_update, no_update, no_update, no_update
 
 
 def create_high_sensors_tab(data, n_clicks):
@@ -261,7 +263,7 @@ def create_high_sensors_tab(data, n_clicks):
     else:
         button = 'The live graphs are currently paused.'
         high_children = no_update
-    return no_update, no_update, no_update, no_update, no_update, no_update, button, no_update, no_update, high_children, no_update, no_update, no_update
+    return no_update, no_update, button, no_update, no_update, high_children, no_update, no_update, no_update
 
 
 def create_med_senors_tab(data, n_clicks):
@@ -271,7 +273,7 @@ def create_med_senors_tab(data, n_clicks):
     else:
         button = 'The live graphs are currently paused.'
         medium_children = no_update
-    return no_update, no_update, no_update, no_update, no_update, no_update, button, no_update, no_update, no_update, medium_children, no_update, no_update
+    return no_update, no_update, button, no_update, no_update, no_update, medium_children, no_update, no_update
 
 
 def create_low_sensors_tab(data, n_clicks):
@@ -281,7 +283,7 @@ def create_low_sensors_tab(data, n_clicks):
     else:
         button = 'The live graphs are currently paused.'
         low_children = no_update
-    return no_update, no_update, no_update, no_update, no_update, no_update, button, no_update, no_update, no_update, no_update, low_children, no_update
+    return no_update, no_update, button, no_update, no_update, no_update, no_update, low_children, no_update
 
 
 def create_safe_sensors_tab(data, n_clicks):
@@ -291,7 +293,7 @@ def create_safe_sensors_tab(data, n_clicks):
     else:
         button = 'The live graphs are currently paused.'
         safety_children = no_update
-    return no_update, no_update, no_update, no_update, no_update, no_update, button, no_update, no_update, no_update, no_update, no_update, safety_children
+    return no_update, no_update, button, no_update, no_update, no_update, no_update, no_update, safety_children
 
 # Instead of graduated bars, do LED Displays, display in green if current value is greater than average of past 5 values
 # Have multi-valued dropdown menu instead of single valued
