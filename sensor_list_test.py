@@ -27,9 +27,23 @@ hp_sens = {
         'min_value': 0,
         'max_value': 100,
     },
-    'ACCEL':{
-        'label': 'Accelerometer',
-        'id': 'ACCEL',
+    'ACCELX':{
+        'label': 'Accelerometer X (Longitudinal)',
+        'id': 'ACCELX',
+        'units': 'Gs',
+        'min_value': 0,
+        'max_value': 16
+    },
+    'ACCELY':{
+        'label': 'Accelerometer Y (Latitudinal)',
+        'id': 'ACCELY',
+        'units': 'Gs',
+        'min_value': 0,
+        'max_value': 16
+    },
+    'ACCELZ':{
+        'label': 'Accelerometer Z (Normal)',
+        'id': 'ACCELZ',
         'units': 'Gs',
         'min_value': 0,
         'max_value': 16
@@ -72,12 +86,47 @@ mp_sens = {
         'min_value': -180,
         'max_value': 180,
     },
-    'GYRO': {
-        'label': 'Gyroscope',
-        'id': 'GYRO',
+    'GYROX': {
+        'label': 'Gyroscope X (Roll)',
+        'id': 'GYROX',
         'units': 'degrees/s',
         'min_value': -4*250,
         'max_value': 4*250,
+    },
+    'GYROY': {
+        'label': 'Gyroscope Y (Pitch)',
+        'id': 'GYROY',
+        'units': 'degrees/s',
+        'min_value': -4*250,
+        'max_value': 4*250,
+    },
+    'GYROZ': {
+        'label': 'Gyroscope Z (Yaw)',
+        'id': 'GYROZ',
+        'units': 'degrees/s',
+        'min_value': -4*250,
+        'max_value': 4*250,
+    },
+    'MAGNETX': {
+        'label': 'Magnetometer X',
+        'id': 'MAGNETX',
+        'units': 'Teslas',
+        'min_value': -4800,
+        'max_value': 4800,
+    },
+    'MAGNETY': {
+        'label': 'Magnetometer Y',
+        'id': 'MAGNETX',
+        'units': 'Teslas',
+        'min_value': -4800,
+        'max_value': 4800,
+    },
+    'MAGNETZ': {
+        'label': 'Magnetometer Z',
+        'id': 'MAGNETX',
+        'units': 'Teslas',
+        'min_value': -4800,
+        'max_value': 4800,
     }
 }
 
