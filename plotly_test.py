@@ -20,11 +20,11 @@ colors = {
 # change this file that the csv is stored in
 file = 'TelemetryData/data.csv'
 num_clicks = 1
-refresh_rate = (1/10 * 1000)  # change the first number of the denominator to the refreshes you want per second
+refresh_rate = (1/5 * 1000)  # change the first number of the denominator to the refreshes you want per second
 df = pd.read_csv(file)
 
 class variables:
-    most_recent_time = df['time'][len(df)-1]
+    most_recent_time = df['Time'][len(df)-1]
 
 def all_sensors():
     result = []
@@ -75,13 +75,13 @@ app.layout = html.Div([
             html.H4(children="Sensor Graphs"),
             dcc.Dropdown(id='dropdown-graph',
                          options=create_options(),
-                         value=['fl_vss'],
+                         value=['FL_VSS'],
                          multi=True),
             html.Div(id='qo_graphs'),
             html.H4(children="Sensor Gauges"),
             dcc.Dropdown(id='dropdown-gauge',
                          options=create_options(),
-                         value=['fl_vss'],
+                         value=['FL_VSS'],
                          multi=True),
             html.Center(id='qo_gauges'),
         ]),
@@ -108,7 +108,7 @@ def create_header(sensor):
 
 def create_graph(sensor, data):
     return dcc.Graph(id=sensor['id'] + "_graph",
-                     figure=go.Figure(go.Scatter(x=data['time'], y=data[sensor['id']])).update_layout(
+                     figure=go.Figure(go.Scatter(x=data['Time'], y=data[sensor['id']])).update_layout(
                          title_text=sensor['label'] + " Graph",
                          xaxis=dict(rangeslider=dict(visible=True), type="linear")))
 
@@ -122,21 +122,24 @@ def create_graphs(sensors_lst, data):
 
 
 def create_grad_bar(sensor, data):
-    maxVal = sensor['max_value']
-    minVal = sensor['min_value']
-    return daq.GraduatedBar(id=sensor['id'] + "_grad_bar",
-                            color={"ranges": {"green": [minVal, maxVal * .8],
-                                              "yellow": [maxVal * .8, maxVal * .9],
-                                              "red": [maxVal * .9, maxVal]}},
-                            showCurrentValue=True, size=1000, max=maxVal,
-                            step=(abs(minVal) + abs(maxVal)) / 100,
-                            value=abs(data[sensor['id']][len(data) - 1]))
+    curr = data[sensor['id']][len(data)-1]
+    if curr > sensor['max_value'] or curr < sensor['min_value']:
+        text_color='#FF0000'
+    else:
+        text_color='#4E2A84'
+    return daq.LEDDisplay(id=sensor['id']+"_grad_bar",
+                          label=sensor['label']+" ("+sensor['units']+")",
+                          value=curr,
+                          color=text_color,
+                          style={'display': 'inline-block',
+                                 'width': '20%'}
+                          )
 
 
 def create_grad_bars(data):
     result = []
     for i in range(len(all_sensors_lst)):
-        result.append(create_header(all_sensors_lst[i]))
+        #result.append(create_header(all_sensors_lst[i]))
         result.append(create_grad_bar(all_sensors_lst[i], data))
     return result
 
@@ -180,15 +183,15 @@ def find_sensor_given_id(id):
 )
 def update_front_page(id_gauges, id_graphs, n_intervals, n_clicks, active_tab):
     data = pd.read_csv(file)
-    if data['time'][len(data)-1] == variables.most_recent_time:
+    if data['Time'][len(data)-1] == variables.most_recent_time:
         variables.most_recent_time = variables.most_recent_time
-        # return no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update
+        return no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update, no_update
 
         # remove this comment if you want the page to update ONLY when a
         # new piece of data is received, this can improve efficiency but if you switch tabs, it will take until the
         # next piece of data is received to load the tab
     else:
-        variables.most_recent_time = data['time'][len(data)-1]
+        variables.most_recent_time = data['Time'][len(data)-1]
 
     if active_tab == 'qo_tab':
         return create_quick_overview_tab(id_gauges, id_graphs, n_clicks, data)
@@ -214,7 +217,7 @@ def create_quick_overview_tab(id_gauges, id_graphs, n_clicks, data):
             sensor_graph = find_sensor_given_id(id_graph)
             if sensor_graph:
                 graphs.append(dcc.Graph(id=sensor_graph['id']+"_qo_graph",
-                                        figure=go.Figure(go.Scatter(x=data['time'], y=data[sensor_graph['id']])).update_layout(
+                                        figure=go.Figure(go.Scatter(x=data['Time'][-300:], y=data[sensor_graph['id']][-300:])).update_layout(
                                             title_text=sensor_graph['label'] + " Graph",
                                             xaxis=dict(rangeslider=dict(visible=False), type="linear"))))
             else:
@@ -240,11 +243,26 @@ def create_quick_overview_tab(id_gauges, id_graphs, n_clicks, data):
                                     value=gauge_value,
                                     showCurrentValue=True,
                                     style={'display': 'inline-block',
-                                           'textAlign': 'center'}))
+                                           'width': '20%'}))
         else:
             raise PreventUpdate
 
     return gauges, graphs, button, no_update, no_update, no_update, no_update, no_update, no_update
+
+
+def create_sensor_tab(id_gauges, id_graphs, data, n_clicks, tab):
+    if tab == 'qo_tab':
+        return create_quick_overview_tab(id_gauges, id_graphs, n_clicks, data)
+    elif tab == 'all_sensors_tab':
+        return create_all_sensors_tab(data, n_clicks)
+    elif tab == 'high_sensors_tab':
+        return create_high_sensors_tab(data, n_clicks)
+    elif tab == 'medium_sensors_tab':
+        return create_med_senors_tab(data, n_clicks)
+    elif tab == 'low_sensors_tab':
+        return create_low_sensors_tab(data, n_clicks)
+    elif tab == 'safety_sensors_tab':
+        return create_safe_sensors_tab(data, n_clicks)
 
 
 def create_all_sensors_tab(data, n_clicks):
@@ -296,9 +314,8 @@ def create_safe_sensors_tab(data, n_clicks):
     return no_update, no_update, button, no_update, no_update, no_update, no_update, no_update, safety_children
 
 # Instead of graduated bars, do LED Displays, display in green if current value is greater than average of past 5 values
-# Have multi-valued dropdown menu instead of single valued
 # Be able to select what you want on each axis, including time for the graphs
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=False)

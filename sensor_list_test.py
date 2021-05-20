@@ -1,35 +1,35 @@
 hp_sens = {
-    'fl_vss': {
+    'FL_VSS': {
         'label': "Front Left Wheel Speed",
-        'id': 'fl_vss',
+        'id': 'FL_VSS',
         'units': 'MPH',
         'min_value': 0,
         'max_value': 100,
     },
-    'fr_vss': {
+    'FR_VSS': {
         'label': 'Front Right Wheel Speed',
-        'id': 'fr_vss',
+        'id': 'FR_VSS',
         'units': 'MPH',
         'min_value': 0,
         'max_value': 100,
     },
-    'bl_vss': {
+    'BL_VSS': {
         'label': 'Back Left Wheel Speed',
-        'id': 'bl_vss',
+        'id': 'BL_VSS',
         'units': 'MPH',
         'min_value': 0,
         'max_value': 100,
     },
-    'br_vss': {
+    'BR_VSS': {
         'label': 'Back Right Wheel Speed',
-        'id': 'br_vss',
+        'id': 'BR_VSS',
         'units': 'MPH',
         'min_value': 0,
         'max_value': 100,
     },
-    'accel':{
+    'ACCEL':{
         'label': 'Accelerometer',
-        'id': 'accel',
+        'id': 'ACCEL',
         'units': 'Gs',
         'min_value': 0,
         'max_value': 16
@@ -37,44 +37,44 @@ hp_sens = {
 }
 
 mp_sens = {
-    'fl_sus_pot': {
+    'FL_SUS_POT': {
         'label': 'Front Left Suspension Potentiometer',
-        'id': 'fl_sus_pot',
+        'id': 'FL_SUS_POT',
         'units': 'in.',
         'min_value': 0,
         'max_value': 6.5,
     },
-    'fr_sus_pot': {
+    'FR_SUS_POT': {
         'label': 'Front Right Suspension Potentiometer',
         'units': 'in.',
-        'id': 'fr_sus_pot',
+        'id': 'FR_SUS_POT',
         'min_value': 0,
         'max_value': 6.5,
     },
-    'bl_sus_pot': {
+    'BL_SUS_POT': {
         'label': 'Back Left Suspension Potentiometer',
-        'id': 'bl_sus_pot',
+        'id': 'BL_SUS_POT',
         'units': 'in.',
         'min_value': 0,
         'max_value': 6.5,
     },
-    'br_sus_pot': {
+    'BR_SUS_POT': {
         'label': 'Back Right Suspension Potentiometer',
-        'id': 'br_sus_pot',
+        'id': 'BR_SUS_POT',
         'units': 'in.',
         'min_value': 0,
         'max_value': 6.5,
     },
-    'steer_ang': {
+    'STEER_ANG': {
         'label': 'Steering Angle',
-        'id': 'steer_ang',
+        'id': 'STEER_ANG',
         'units': 'degrees',
         'min_value': -180,
         'max_value': 180,
     },
-    'gyro': {
+    'GYRO': {
         'label': 'Gyroscope',
-        'id': 'gyro',
+        'id': 'GYRO',
         'units': 'degrees/s',
         'min_value': -4*250,
         'max_value': 4*250,
@@ -82,37 +82,37 @@ mp_sens = {
 }
 
 lp_sens = {
-    'tps': {
+    'TPS': {
         'label': 'Throttle Position',
-        'id': 'tps',
+        'id': 'TPS',
         'units': '%',
         'min_value': 0,
         'max_value': 90,
     },
-    'oil_pres': {
+    'OIL_PRES': {
         'label': 'Oil Pressure',
-        'id': 'oil_pres',
+        'id': 'OIL_PRES',
         'units': 'PSI',
         'min_value': 0,
         'max_value': 100,
     },
-    'oil_temp': {
+    'OIL_TEMP': {
         'label': 'Oil Temperature',
-        'id': 'oil_temp',
+        'id': 'OIL_TEMP',
         'units': 'Fahrenheit',
         'min_value': -80,
         'max_value': 150,
     },
-    'map': {
+    'MAP': {
         'label': 'Intake Manifold Air Pressure',
-        'id': 'map',
+        'id': 'MAP',
         'units': 'Pa',
         'min_value': 0,
         'max_value': 100,
     },
-    'mat': {
+    'MAT': {
         'label': 'Intake Manifold Air Temperature',
-        'id': 'mat',
+        'id': 'MAT',
         'units': 'Celsius',
         'min_value': 0,
         'max_value': 100,
@@ -120,51 +120,51 @@ lp_sens = {
 }
 
 s_sens = {
-    'fl_brk_tmp': {
+    'FL_BRK_TMP': {
         'label': 'Front Left Brake Temperature',
-        'id': 'fl_brk_tmp',
+        'id': 'FL_BRK_TMP',
         'units': 'Celsius',
         'min_value': 0,
         'max_value': 800,
     },
-    'fr_brk_tmp': {
+    'FR_BRK_TMP': {
         'label': 'Front Right Brake Temperature',
-        'id': 'fr_brk_tmp',
+        'id': 'FR_BRK_TMP',
         'units': 'Celsius',
         'min_value': 0,
         'max_value': 800,
     },
-    'bl_brk_tmp': {
+    'BL_BRK_TMP': {
         'label': 'Back Left Brake Temperature',
-        'id': 'bl_brk_tmp',
+        'id': 'BL_BRK_TMP',
         'units': 'Celsius',
         'min_value': 0,
         'max_value': 800,
     },
-    'br_brk_tmp': {
+    'BR_BRK_TMP': {
         'label': 'Back Right Brake Temperature',
-        'id': 'br_brk_tmp',
+        'id': 'BR_BRK_TMP',
         'units': 'Celsius',
         'min_value': 0,
         'max_value': 800,
     },
-    'f_brk_pres': {
+    'F_BRK_PRES': {
         'label': 'Front Brake Pressure',
-        'id': 'f_brk_pres',
+        'id': 'F_BRK_PRES',
         'units': 'PSI',
         'min_value': 0,
         'max_value': 1000,
     },
-    'b_brk_pres': {
+    'B_BRK_PRES': {
         'label': 'Back Brake Pressure',
-        'id': 'b_brk_pres',
+        'id': 'B_BRK_PRES',
         'units': 'PSI',
         'min_value': 0,
         'max_value': 1000,
     },
-    'cool_temp': {
+    'COOL_TEMP': {
         'label': 'Coolant Temperature',
-        'id': 'cool_temp',
+        'id': 'COOL_TEMP',
         'units': 'Celsius',
         'min_value': 0,
         'max_value': 150,
