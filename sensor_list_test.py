@@ -1,5 +1,25 @@
-hp_sens = {
-    'FL_VSS': {
+all_sensors = ['Time', 'FL_VSS', 'FR_VSS', 'BL_VSS', 'BR_VSS', 'FL_SUS_POT', 'FR_SUS_POT', 'BL_SUS_POT', 'BR_SUS_POT',
+               'STEER_ANG', 'OIL_TEMP', 'OIL_PRES', 'MAP', 'MAT', 'TPS', 'FL_BRK_TMP', 'FR_BRK_TMP', 'BL_BRK_TMP',
+               'BR_BRK_TMP', 'F_BRK_PRES', 'B_BRK_PRES', 'COOL_TEMP', 'ACCELX', 'ACCELY', 'ACCELZ', 'GYROX', 'GYROY',
+               'GYROZ', 'MAGNETX', 'MAGNETY', 'MAGNETZ', 'RANDOM_TEST']
+
+tabs = ['High Priority Sensors', 'Medium Priority Sensors', 'Low Priority Sensors', 'Safety Sensors']
+tab_values = [("tab_"+str(i)) for i in range(len(tabs))]
+
+group1 = ['FL_VSS', 'FR_VSS', 'BL_VSS', 'BR_VSS', 'ACCELX', 'ACCELY', 'ACCELZ']
+group2 = ['FL_SUS_POT', 'FR_SUS_POT', 'BL_SUS_POT', 'BR_SUS_POT', 'STEER_ANG', 'GYROX', 'GYROY', 'GYROZ', 'MAGNETX',
+          'MAGNETY', 'MAGNETZ']
+group3 = ['TPS', 'OIL_PRES', 'OIL_TEMP', 'MAP', 'MAT']
+group4 = ['FL_BRK_TMP', 'FR_BRK_TMP', 'BL_BRK_TMP', 'BR_BRK_TMP', 'F_BRK_PRES', 'B_BRK_PRES', 'COOL_TEMP']
+
+groups = [group1, group2, group3, group4]
+
+# This dictionary contains all the relevant sensor info (label, part identifier, min/max, and units)
+# The tabs on the GUI can be changed by changing the name of the dictionary that contains the individual sensors
+# Add more sensors to the GUI by creating a new sensor in the relevant grouping with all of the sensors info, make
+# sure to also add the part identifier of the new sensor to the 'all_sensors' list.
+sensors_info = {
+    'FL_VSS': {  # This name needs to be the same as the sensor id
         'label': "Front Left Wheel Speed",
         'id': 'FL_VSS',
         'units': 'MPH',
@@ -27,30 +47,27 @@ hp_sens = {
         'min_value': 0,
         'max_value': 100,
     },
-    'ACCELX':{
+    'ACCELX': {
         'label': 'Accelerometer X (Longitudinal)',
         'id': 'ACCELX',
         'units': 'Gs',
         'min_value': 0,
         'max_value': 16
     },
-    'ACCELY':{
+    'ACCELY': {
         'label': 'Accelerometer Y (Latitudinal)',
         'id': 'ACCELY',
         'units': 'Gs',
         'min_value': 0,
         'max_value': 16
     },
-    'ACCELZ':{
+    'ACCELZ': {
         'label': 'Accelerometer Z (Normal)',
         'id': 'ACCELZ',
         'units': 'Gs',
         'min_value': 0,
         'max_value': 16
-    }
-}
-
-mp_sens = {
+    },
     'FL_SUS_POT': {
         'label': 'Front Left Suspension Potentiometer',
         'id': 'FL_SUS_POT',
@@ -90,22 +107,22 @@ mp_sens = {
         'label': 'Gyroscope X (Roll)',
         'id': 'GYROX',
         'units': 'degrees/s',
-        'min_value': -4*250,
-        'max_value': 4*250,
+        'min_value': -4 * 250,
+        'max_value': 4 * 250,
     },
     'GYROY': {
         'label': 'Gyroscope Y (Pitch)',
         'id': 'GYROY',
         'units': 'degrees/s',
-        'min_value': -4*250,
-        'max_value': 4*250,
+        'min_value': -4 * 250,
+        'max_value': 4 * 250,
     },
     'GYROZ': {
         'label': 'Gyroscope Z (Yaw)',
         'id': 'GYROZ',
         'units': 'degrees/s',
-        'min_value': -4*250,
-        'max_value': 4*250,
+        'min_value': -4 * 250,
+        'max_value': 4 * 250,
     },
     'MAGNETX': {
         'label': 'Magnetometer X',
@@ -127,10 +144,7 @@ mp_sens = {
         'units': 'Teslas',
         'min_value': -4800,
         'max_value': 4800,
-    }
-}
-
-lp_sens = {
+},
     'TPS': {
         'label': 'Throttle Position',
         'id': 'TPS',
@@ -165,10 +179,7 @@ lp_sens = {
         'units': 'Celsius',
         'min_value': 0,
         'max_value': 100,
-    }
-}
-
-s_sens = {
+},
     'FL_BRK_TMP': {
         'label': 'Front Left Brake Temperature',
         'id': 'FL_BRK_TMP',
@@ -219,26 +230,3 @@ s_sens = {
         'max_value': 150,
     }
 }
-
-testing_sensors = {
-    'gps': {
-        'label': 'GPS',
-        'units': 'PSI',
-        'max_value': 0,
-    },
-    'strain1': {
-        'label': 'Strain Gauges 1',
-        'units': 'PSI',
-        'max_value': 0,
-    },
-    'ptube1': {
-        'label': 'Pitot Tube 1',
-        'units': 'Celsius',
-        'max_value': 0,
-    }
-}
-
-used_sensors_list = ['fl_vss', 'fr_vss', 'bl_vss', 'br_vss', 'fl_sus_pot', 'fr_sus_pot', 'bl_sus_pot', 'br_sus_pot',
-                     'steer_ang', 'tps', 'oil_pres', 'oil_temp', 'map', 'mat', 'fl_brk_tmp', 'fr_brk_tmp', 'bl_brk_tmp',
-                     'br_brk_tmp', 'f_brk_pres', 'b_brk_pres', 'cool_temp']
-

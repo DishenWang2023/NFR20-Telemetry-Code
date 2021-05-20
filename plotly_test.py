@@ -30,14 +30,8 @@ class variables:
 
 def all_sensors():
     result = []
-    for sensor in sensors.hp_sens:
-        result.append(sensors.hp_sens[sensor])
-    for sensor in sensors.mp_sens:
-        result.append(sensors.mp_sens[sensor])
-    for sensor in sensors.lp_sens:
-        result.append(sensors.lp_sens[sensor])
-    for sensor in sensors.s_sens:
-        result.append(sensors.s_sens[sensor])
+    for sensor in sensors.sensors_info:
+        result.append(sensors.sensors_info[sensor])
     return result
 
 
@@ -112,9 +106,9 @@ def create_graph(sensor, data):
 
 def create_graphs(sensors_lst, data):
     result = []
-    for sensor in sensors_lst:
-        result.append(html.H3(sensors_lst[sensor]['label']))
-        result.append(create_graph(sensors_lst[sensor], data))
+    for sensor_id in sensors_lst:
+        result.append(html.H3(sensors.sensors_info[sensor_id]['label']))
+        result.append(create_graph(sensors.sensors_info[sensor_id], data))
     return result
 
 
@@ -141,16 +135,9 @@ def create_LED_Displays(data):
 
 
 def find_sensor_given_id(id):
-    if id in sensors.hp_sens:
-        return sensors.hp_sens[id]
-    elif id in sensors.mp_sens:
-        return sensors.mp_sens[id]
-    elif id in sensors.lp_sens:
-        return sensors.lp_sens[id]
-    elif id in sensors.s_sens:
-        return sensors.s_sens[id]
-    else:
-        return False
+    if id in sensors.sensors_info:
+        return sensors.sensors_info[id]
+    return False
 
 
 # ____________________________________________________________
@@ -161,7 +148,6 @@ def find_sensor_given_id(id):
 # Dropdown graph and gauge
 @app.callback(
     dash.dependencies.Output('qo_gauges', 'children'),
-
     dash.dependencies.Output('qo_graphs', 'children'),  # The graph on the quick overview tab
     dash.dependencies.Output('container-button-basic', 'children'),  # Updating the text under the button
     dash.dependencies.Output('qo_tab', 'children'),  # Updates the quick-overview tab
@@ -238,13 +224,13 @@ def create_sensor_tab(data, n_clicks, tab):
         if tab == 'all_sensors_tab':
             all_children = create_LED_Displays(data)
         elif tab == 'high_sensors_tab':
-            high_children = create_graphs(sensors.hp_sens, data)
+            high_children = create_graphs(sensors.group1, data)
         elif tab == 'medium_sensors_tab':
-            medium_children = create_graphs(sensors.mp_sens, data)
+            medium_children = create_graphs(sensors.group2, data)
         elif tab == 'low_sensors_tab':
-            low_children = create_graphs(sensors.lp_sens, data)
+            low_children = create_graphs(sensors.group3, data)
         elif tab == 'safety_sensors_tab':
-            safety_children = create_graphs(sensors.s_sens, data)
+            safety_children = create_graphs(sensors.group4, data)
         else:
             raise PreventUpdate
     else:
