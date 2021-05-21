@@ -16,7 +16,7 @@ colors = {
 }
 
 # change this file that the csv is stored in
-file = 'TelemetryData/data.csv'
+file = 'Telemetry_Data/test_data.csv'
 
 df = pd.read_csv(file)
 num_clicks = 1

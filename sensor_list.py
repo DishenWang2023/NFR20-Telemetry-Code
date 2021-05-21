@@ -1,5 +1,5 @@
 sensor_names = ["Index", "Time", "FL_VSS", "FR_VSS", "BL_VSS", "BR_VSS", "FL_BRK_TMP", "FR_BRK_TMP",
-                "BL_BRK_TMP", "BR_BRK_TMP", "FL_SUS_POT", "FR_SUS_POT", "BL_SUS_POT", "BR_SUS_POT", "F_BRK_PRES", "B_BRK_TMP",
+                "BL_BRK_TMP", "BR_BRK_TMP", "FL_SUS_POT", "FR_SUS_POT", "BL_SUS_POT", "BR_SUS_POT", "F_BRK_PRES", "B_BRK_PRES",
                 "STEER_ANG", "TPS", "OIL_PRES", "OIL_TEMP", "COOL_TEMP", "MAP", "MAT", "NEUT",
                 "LAMBDA1", "LAMBDA2", "ACCEL", "GYRO", "GPS"]
 
