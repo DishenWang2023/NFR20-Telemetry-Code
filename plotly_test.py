@@ -71,13 +71,13 @@ app.layout = html.Div([
             html.H4(children="Sensor Graphs"),
             dcc.Dropdown(id='dropdown-graph',
                          options=create_options(),
-                         value=['FL_VSS'],
+                         value=['AVG_VSS'],
                          multi=True),
             html.Div(id='qo_graphs'),
             html.H4(children="Sensor Gauges"),
             dcc.Dropdown(id='dropdown-gauge',
                          options=create_options(),
-                         value=['FL_VSS'],
+                         value=['AVG_VSS'],
                          multi=True),
             html.Center(id='qo_gauges'),
         ]),
@@ -98,8 +98,12 @@ app.layout = html.Div([
 # Helper Functions
 
 def create_graph(sensor, data):
+    if sensor['id'] == 'AVG_VSS':
+        value = (data['FL_VSS'] + data['FR_VSS'] + data['BL_VSS'] + data['BR_VSS']) / 4
+    else:
+        value = data[sensor['id']]
     return dcc.Graph(id=sensor['id'] + "_graph",
-                     figure=go.Figure(go.Scatter(x=data['Time'], y=data[sensor['id']])).update_layout(
+                     figure=go.Figure(go.Scatter(x=data['Time'], y=value)).update_layout(
                          title_text=sensor['label'] + " Graph",
                          xaxis=dict(rangeslider=dict(visible=True), type="linear")))
 
@@ -113,11 +117,17 @@ def create_graphs(sensors_lst, data):
 
 
 def create_LED_Display(sensor, data):
-    curr = data[sensor['id']][len(data) - 1]
+    if sensor['id'] == 'AVG_VSS':
+        curr = (data['FL_VSS'][len(data) - 1] + data['FR_VSS'][len(data) - 1] +
+                data['BL_VSS'][len(data) - 1] + data['BR_VSS'][len(data) - 1]) / 4
+    else:
+        curr = data[sensor['id']][len(data) - 1]
+
     if curr > sensor['max_value'] or curr < sensor['min_value']:
         text_color = '#FF0000'
     else:
         text_color = '#4E2A84'
+
     return daq.LEDDisplay(id=sensor['id'] + "_grad_bar",
                           label=sensor['label'] + " (" + sensor['units'] + ")",
                           value=curr,
@@ -188,12 +198,9 @@ def create_quick_overview_tab(id_gauges, id_graphs, n_clicks, data):
         graphs = []
         for id_graph in id_graphs:
             sensor_graph = find_sensor_given_id(id_graph)
+            graph = create_graph(sensor_graph, data)
             if sensor_graph:
-                graphs.append(dcc.Graph(id=sensor_graph['id'] + "_qo_graph",
-                                        figure=go.Figure(go.Scatter(x=data['Time'][-120:],
-                                                                    y=data[sensor_graph['id']][-120:])).update_layout(
-                                            title_text=sensor_graph['label'] + " Graph",
-                                            xaxis=dict(rangeslider=dict(visible=False), type="linear"))))
+                graphs.append(graph)
 
     else:
         button = 'The live graphs are currently paused.'
@@ -207,7 +214,11 @@ def create_quick_overview_tab(id_gauges, id_graphs, n_clicks, data):
             minVal = sensor_gauge['min_value']
             gauge_unit = sensor_gauge['units']
             gauge_label = sensor_gauge['label']
-            gauge_value = data[sensor_gauge['id']][len(data) - 1]
+            if sensor_gauge['id'] == 'AVG_VSS':
+                gauge_value = (data['FL_VSS'][len(data) - 1] + data['FR_VSS'][len(data) - 1] +
+                               data['BL_VSS'][len(data) - 1] + data['BR_VSS'][len(data) - 1]) / 4
+            else:
+                gauge_value = data[sensor_gauge['id']][len(data) - 1]
             gauges.append(daq.Gauge(id=sensor_gauge['id'] + "_qo_gauge", max=maxVal, min=minVal, units=gauge_unit,
                                     label=gauge_label, value=gauge_value, showCurrentValue=True,
                                     style={'display': 'inline-block',

@@ -1,7 +1,9 @@
+import sys
+
 all_sensors = ['Time', 'FL_VSS', 'FR_VSS', 'BL_VSS', 'BR_VSS', 'FL_SUS_POT', 'FR_SUS_POT', 'BL_SUS_POT', 'BR_SUS_POT',
-               'FL_BRK_TMP', 'FR_BRK_TMP', 'BL_BRK_TMP', 'BR_BRK_TMP', 'F_BRK_PRES', 'B_BRK_PRES', 'COOL_TEMP',
-               'STEER_ANG', 'TPS', 'OIL_TEMP', 'OIL_PRES', 'MAP', 'MAT', 'NEUT', 'ACCELX', 'ACCELY', 'ACCELZ', 'GYROX',
-               'GYROY', 'GYROZ', 'MAGNETX', 'MAGNETY', 'MAGNETZ']
+               'STEER_ANG', 'OIL_TEMP', 'OIL_PRES', 'MAP', 'MAT', 'TPS', 'FL_BRK_TMP', 'FR_BRK_TMP', 'BL_BRK_TMP',
+               'BR_BRK_TMP', 'F_BRK_PRES', 'B_BRK_PRES', 'COOL_TEMP', 'ACCELX', 'ACCELY', 'ACCELZ', 'GYROX', 'GYROY',
+               'GYROZ', 'MAGNETX', 'MAGNETY', 'MAGNETZ', 'NEUT', 'AVG_VSS', 'LAMBDA1', 'LAMBDA2']
 
 all_xbee_sensors = ['FL_VSS', 'FR_VSS', 'BL_VSS', 'BR_VSS', 'FL_SUS_POT', 'FR_SUS_POT', 'BL_SUS_POT', 'BR_SUS_POT',
                'FL_BRK_TMP', 'FR_BRK_TMP', 'BL_BRK_TMP', 'BR_BRK_TMP', 'F_BRK_PRES', 'B_BRK_PRES', 'COOL_TEMP', 'STEER_ANG',
@@ -11,10 +13,10 @@ all_xbee_sensors = ['FL_VSS', 'FR_VSS', 'BL_VSS', 'BR_VSS', 'FL_SUS_POT', 'FR_SU
 tabs = ['High Priority Sensors', 'Medium Priority Sensors', 'Low Priority Sensors', 'Safety Sensors']
 tab_values = [("tab_"+str(i)) for i in range(len(tabs))]
 
-group1 = ['FL_VSS', 'FR_VSS', 'BL_VSS', 'BR_VSS', 'ACCELX', 'ACCELY', 'ACCELZ']
+group1 = ['AVG_VSS', 'FL_VSS', 'FR_VSS', 'BL_VSS', 'BR_VSS', 'ACCELX', 'ACCELY', 'ACCELZ']
 group2 = ['FL_SUS_POT', 'FR_SUS_POT', 'BL_SUS_POT', 'BR_SUS_POT', 'STEER_ANG', 'GYROX', 'GYROY', 'GYROZ', 'MAGNETX',
-          'MAGNETY', 'MAGNETZ']
-group3 = ['TPS', 'OIL_PRES', 'OIL_TEMP', 'MAP', 'MAT']
+          'MAGNETY', 'MAGNETZ', 'LAMBDA1', 'LAMBDA2']
+group3 = ['TPS', 'OIL_PRES', 'OIL_TEMP', 'MAP', 'MAT', 'NEUT']
 group4 = ['FL_BRK_TMP', 'FR_BRK_TMP', 'BL_BRK_TMP', 'BR_BRK_TMP', 'F_BRK_PRES', 'B_BRK_PRES', 'COOL_TEMP']
 
 groups = [group1, group2, group3, group4]
@@ -24,6 +26,13 @@ groups = [group1, group2, group3, group4]
 # Add more sensors to the GUI by creating a new sensor in the relevant grouping with all of the sensors info, make
 # sure to also add the part identifier of the new sensor to the 'all_sensors' list.
 sensors_info = {
+    'AVG_VSS': {
+        'label': 'Averaged Wheel Speed',
+        'id': 'AVG_VSS',
+        'units': 'MPH',
+        'min_value': 0,
+        'max_value': 100,
+    },
     'FL_VSS': {  # This name needs to be the same as the sensor id
         'label': "Front Left Wheel Speed",
         'id': 'FL_VSS',
@@ -56,21 +65,21 @@ sensors_info = {
         'label': 'Accelerometer X (Longitudinal)',
         'id': 'ACCELX',
         'units': 'Gs',
-        'min_value': 0,
+        'min_value': -16,
         'max_value': 16
     },
     'ACCELY': {
         'label': 'Accelerometer Y (Latitudinal)',
         'id': 'ACCELY',
         'units': 'Gs',
-        'min_value': 0,
+        'min_value': -16,
         'max_value': 16
     },
     'ACCELZ': {
         'label': 'Accelerometer Z (Normal)',
         'id': 'ACCELZ',
         'units': 'Gs',
-        'min_value': 0,
+        'min_value': -16,
         'max_value': 16
     },
     'FL_SUS_POT': {
@@ -112,22 +121,22 @@ sensors_info = {
         'label': 'Gyroscope X (Roll)',
         'id': 'GYROX',
         'units': 'degrees/s',
-        'min_value': -4 * 250,
-        'max_value': 4 * 250,
+        'min_value': -8 * 250,
+        'max_value': 8 * 250,
     },
     'GYROY': {
         'label': 'Gyroscope Y (Pitch)',
         'id': 'GYROY',
         'units': 'degrees/s',
-        'min_value': -4 * 250,
-        'max_value': 4 * 250,
+        'min_value': -8 * 250,
+        'max_value': 8 * 250,
     },
     'GYROZ': {
         'label': 'Gyroscope Z (Yaw)',
         'id': 'GYROZ',
         'units': 'degrees/s',
-        'min_value': -4 * 250,
-        'max_value': 4 * 250,
+        'min_value': -8 * 250,
+        'max_value': 8 * 250,
     },
     'MAGNETX': {
         'label': 'Magnetometer X',
@@ -233,5 +242,26 @@ sensors_info = {
         'units': 'Celsius',
         'min_value': 0,
         'max_value': 150,
-    }
+    },
+    'NEUT': {
+        'label': 'Neutral',
+        'id': 'NEUT',
+        'units': '',
+        'min_value': 0,
+        'max_value': 1,
+    },
+    'LAMBDA1': {
+        'label': 'Lambda 1 (exhaust ratio / oxygen sensor)',
+        'id': 'LAMBDA1',
+        'units': '',
+        'min_value': 0,
+        'max_value': 1000
+    },
+    'LAMBDA2': {
+        'label': 'Lambda 2',
+        'id': 'LAMBDA2',
+        'units': '',
+        'min_value': 0,
+        'max_value': 1000
+    },
 }
