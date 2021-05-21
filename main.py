@@ -4,7 +4,7 @@ import serial
 import serial.tools.list_ports
 import numpy as np
 import telemetry_csv as tc
-import sensor_list as sl
+import sensor_list_test as sl
 
 # from digi.xbee.devices import XBeeDevice
 csv_name = "Telemetry_Data/test_data.csv"
@@ -16,7 +16,7 @@ def select_serial_port():
         # index 1 of p is the name of the port, this works only for windows, MacOS uses 0
         if 'Serial Port' in p[1]:
             return serial.Serial(p[0], 9600)
-
+    print("Cannot find comport for xbee")
 
 try:
     device.close()
@@ -35,22 +35,17 @@ while (device.inWaiting() == 0):
     time.sleep(2)
     pass
 
-''' ack '''
 print("Data received!")
 time.sleep(1)
 
 index = 0
 start_time = time.time()
-size = 28 * 2 # 27
+size = (len(sl.all_xbee_sensors)+1) * 2 # for consistency, -1 from time, +1 for parity byte
 id_bytes = b'\x80\x01'
 
-sig_list = np.array([1, 1, 1, 1, 1, 1, 1, 1,
-                    1, 1, 1, 1, 1, 1, 1, 1,
-                    1, 1, 1, 1, 1, 1, 1, 1,
-                    1, 1, 1])  # multiplications for each sensor values turning short back to float
+sig_list = np.ones(size)  # multiplications for each sensor values turning short back to float, default as 1 for now
 
-# sig_list = np.array([0,0,0])
-tc.csv_create_header(csv_name, sl.sensor_names)
+tc.csv_create_header(csv_name, sl.all_xbee_sensors)
 
 
 while True:
@@ -76,7 +71,7 @@ while True:
 
     csv_list = np.concatenate((np.array([index, current_time]), sensor_values))
     index += 1
-    tc.csv_store_data(csv_name, sl.sensor_names, csv_list)
+    tc.csv_store_data(csv_name, sl.all_xbee_sensors, csv_list)
     print(csv_list)
 
     ''' wait '''
