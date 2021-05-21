@@ -1,7 +1,7 @@
 all_sensors = ['Time', 'FL_VSS', 'FR_VSS', 'BL_VSS', 'BR_VSS', 'FL_SUS_POT', 'FR_SUS_POT', 'BL_SUS_POT', 'BR_SUS_POT',
                'STEER_ANG', 'OIL_TEMP', 'OIL_PRES', 'MAP', 'MAT', 'TPS', 'FL_BRK_TMP', 'FR_BRK_TMP', 'BL_BRK_TMP',
                'BR_BRK_TMP', 'F_BRK_PRES', 'B_BRK_PRES', 'COOL_TEMP', 'ACCELX', 'ACCELY', 'ACCELZ', 'GYROX', 'GYROY',
-               'GYROZ', 'MAGNETX', 'MAGNETY', 'MAGNETZ', 'RANDOM_TEST']
+               'GYROZ', 'MAGNETX', 'MAGNETY', 'MAGNETZ', 'NEUT']
 
 tabs = ['High Priority Sensors', 'Medium Priority Sensors', 'Low Priority Sensors', 'Safety Sensors']
 tab_values = [("tab_"+str(i)) for i in range(len(tabs))]
@@ -9,7 +9,7 @@ tab_values = [("tab_"+str(i)) for i in range(len(tabs))]
 group1 = ['FL_VSS', 'FR_VSS', 'BL_VSS', 'BR_VSS', 'ACCELX', 'ACCELY', 'ACCELZ']
 group2 = ['FL_SUS_POT', 'FR_SUS_POT', 'BL_SUS_POT', 'BR_SUS_POT', 'STEER_ANG', 'GYROX', 'GYROY', 'GYROZ', 'MAGNETX',
           'MAGNETY', 'MAGNETZ']
-group3 = ['TPS', 'OIL_PRES', 'OIL_TEMP', 'MAP', 'MAT']
+group3 = ['TPS', 'OIL_PRES', 'OIL_TEMP', 'MAP', 'MAT', 'NEUT']
 group4 = ['FL_BRK_TMP', 'FR_BRK_TMP', 'BL_BRK_TMP', 'BR_BRK_TMP', 'F_BRK_PRES', 'B_BRK_PRES', 'COOL_TEMP']
 
 groups = [group1, group2, group3, group4]
@@ -228,5 +228,12 @@ sensors_info = {
         'units': 'Celsius',
         'min_value': 0,
         'max_value': 150,
+    },
+    'NEUT': {
+        'label': 'Neutral',
+        'id': 'NEUT',
+        'units': '',
+        'min_value': 0,
+        'max_value': 1,
     }
 }
