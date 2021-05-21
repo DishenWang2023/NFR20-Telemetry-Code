@@ -51,21 +51,21 @@ sensors_info = {
         'label': 'Accelerometer X (Longitudinal)',
         'id': 'ACCELX',
         'units': 'Gs',
-        'min_value': 0,
+        'min_value': -16,
         'max_value': 16
     },
     'ACCELY': {
         'label': 'Accelerometer Y (Latitudinal)',
         'id': 'ACCELY',
         'units': 'Gs',
-        'min_value': 0,
+        'min_value': -16,
         'max_value': 16
     },
     'ACCELZ': {
         'label': 'Accelerometer Z (Normal)',
         'id': 'ACCELZ',
         'units': 'Gs',
-        'min_value': 0,
+        'min_value': -16,
         'max_value': 16
     },
     'FL_SUS_POT': {
@@ -107,22 +107,22 @@ sensors_info = {
         'label': 'Gyroscope X (Roll)',
         'id': 'GYROX',
         'units': 'degrees/s',
-        'min_value': -4 * 250,
-        'max_value': 4 * 250,
+        'min_value': -8 * 250,
+        'max_value': 8 * 250,
     },
     'GYROY': {
         'label': 'Gyroscope Y (Pitch)',
         'id': 'GYROY',
         'units': 'degrees/s',
-        'min_value': -4 * 250,
-        'max_value': 4 * 250,
+        'min_value': -8 * 250,
+        'max_value': 8 * 250,
     },
     'GYROZ': {
         'label': 'Gyroscope Z (Yaw)',
         'id': 'GYROZ',
         'units': 'degrees/s',
-        'min_value': -4 * 250,
-        'max_value': 4 * 250,
+        'min_value': -8 * 250,
+        'max_value': 8 * 250,
     },
     'MAGNETX': {
         'label': 'Magnetometer X',
