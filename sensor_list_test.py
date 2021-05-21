@@ -250,13 +250,13 @@ sensors_info = {
         'id': 'LAMBDA1',
         'units': '',
         'min_value': 0,
-        'max_value': 1000
+        'max_value': 5
     },
     'LAMBDA2': {
         'label': 'Lambda 2',
         'id': 'LAMBDA2',
         'units': '',
         'min_value': 0,
-        'max_value': 1000
+        'max_value': 5
     },
 }
