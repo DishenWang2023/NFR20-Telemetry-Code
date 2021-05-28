@@ -19,8 +19,7 @@ colors = {
 
 # change this file that the csv is stored in
 file = 'TelemetryData/data.csv'
-num_clicks = 1
-refresh_rate = (1 / 5 * 1000)  # change the denominator to the refreshes you want per second
+refresh_rate = (1/5 * 1000)  # change the denominator to the refreshes you want per second
 df = pd.read_csv(file)
 
 
@@ -140,6 +139,7 @@ def create_LED_Display(sensor, data):
 def create_LED_Displays(data):
     result = []
     for i in range(len(all_sensors_lst)):
+        sensor = all_sensors_lst[i]
         result.append(create_LED_Display(all_sensors_lst[i], data))
     return result
 
