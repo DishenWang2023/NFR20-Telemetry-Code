@@ -251,4 +251,4 @@ def create_sensor_tab(data, n_clicks, tab):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=False)
+    app.run_server(debug=True)
