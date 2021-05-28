@@ -19,8 +19,7 @@ colors = {
 
 # change this file that the csv is stored in
 file = 'TelemetryData/data.csv'
-num_clicks = 1
-refresh_rate = (1 / 5 * 1000)  # change the denominator to the refreshes you want per second
+refresh_rate = (1/5 * 1000)  # change the denominator to the refreshes you want per second
 df = pd.read_csv(file)
 
 
@@ -251,4 +250,4 @@ def create_sensor_tab(data, n_clicks, tab):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=False)
+    app.run_server(debug=True)
