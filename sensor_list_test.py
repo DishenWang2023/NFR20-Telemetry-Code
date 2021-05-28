@@ -5,8 +5,13 @@ all_sensors = ['Time', 'FL_VSS', 'FR_VSS', 'BL_VSS', 'BR_VSS', 'FL_SUS_POT', 'FR
                'RPM', 'IG_CUT']
 # change the ordering of this to the desired order for the dropdown lists and the order for the 'all sensors' tab
 
+all_xbee_sensors = ['FL_VSS', 'FR_VSS', 'BL_VSS', 'BR_VSS', 'FL_SUS_POT', 'FR_SUS_POT', 'BL_SUS_POT', 'BR_SUS_POT',
+                    'FL_BRK_TMP', 'FR_BRK_TMP', 'BL_BRK_TMP', 'BR_BRK_TMP', 'F_BRK_PRES', 'B_BRK_PRES', 'COOL_TEMP',
+                    'STEER_ANG', 'TPS', 'OIL_TEMP', 'OIL_PRES', 'MAP', 'MAT', 'NEUT', "LAMBDA1", "LAMBDA2", 'ACCELX',
+                    'ACCELY', 'ACCELZ', 'GYROX', 'GYROY', 'GYROZ', 'MAGNETX', 'MAGNETY', 'MAGNETZ']
+
 tabs = ['High Priority Sensors', 'Medium Priority Sensors', 'Low Priority Sensors', 'Safety Sensors']
-tab_values = [("tab_"+str(i)) for i in range(len(tabs))]
+tab_values = [("tab_" + str(i)) for i in range(len(tabs))]
 
 group1 = ['AVG_VSS', 'FL_VSS', 'FR_VSS', 'BL_VSS', 'BR_VSS', 'ACCELX', 'ACCELY', 'ACCELZ']
 group2 = ['FL_SUS_POT', 'FR_SUS_POT', 'BL_SUS_POT', 'BR_SUS_POT', 'STEER_ANG', 'GYROX', 'GYROY', 'GYROZ', 'MAGNETX',
@@ -153,7 +158,7 @@ sensors_info = {
         'units': 'Teslas',
         'min_value': -4800,
         'max_value': 4800,
-},
+    },
     'TPS': {
         'label': 'Throttle Position',
         'id': 'TPS',
@@ -188,7 +193,7 @@ sensors_info = {
         'units': 'Celsius',
         'min_value': 0,
         'max_value': 100,
-},
+    },
     'FL_BRK_TMP': {
         'label': 'Front Left Brake Temperature',
         'id': 'FL_BRK_TMP',

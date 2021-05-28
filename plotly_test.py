@@ -139,7 +139,6 @@ def create_LED_Display(sensor, data):
 def create_LED_Displays(data):
     result = []
     for i in range(len(all_sensors_lst)):
-        sensor = all_sensors_lst[i]
         result.append(create_LED_Display(all_sensors_lst[i], data))
     return result
 
